@@ -1,0 +1,76 @@
+#+TITLE: Intro to Easy Deployments with NixOps
+#+AUTHOR: Ben Sima
+#+EMAIL: ben@bsima.me
+#+DATE: 2018-03-27 Wed
+#+DESCRIPTION: https://github.com/bsima/talks
+#+startup: beamer
+#+OPTIONS: H:1 toc:nil
+#+OPTIONS: ^:nil
+#+LATEX_CLASS: beamer
+#+LATEX_listingsCLASS_OPTIONS: [presentation]
+#+BEAMER_THEME: Boadilla
+#+EPRESENT_FRAME_LEVEL: 1
+* Abstract
+NixOps is a declarative deployment tool and language for Linux. The same
+configuration for your local VM will also deploy to your AWS cluster, Digital
+Ocean droplets, or bare-metal data center. Configurations are versioned and can
+be rolled back with a single command. This talk will cover the basics of NixOps,
+the Nix configuration language, and provide resources for how to start using Nix
+today.
+* What is Nix?
+- declarative, purely functional language
+- configuration DSL, ecosystem, libraries, package manager
+- build system?
+- started as a research project
+- now a full Linux distro
+- yes, it's actually used in production
+* Nix lang data types
+(Run these examples in =nix-repl=)
+#+BEGIN_EXAMPLE nix
+n = 42                             # variables
+"Hello World, ${toString n}"       # strings
+''                                 # multiline strings
+Hello World.
+The answer is ${toString n}.
+''
+[ 1 2 3 "hi" 4 ]                   # list
+{ attr = "value" }                 # sets (dictionary)
+./src/Makefile                     # first-class paths
+#+END_EXAMPLE
+* Nix lang functions
+#+BEGIN_EXAMPLE
+nix-repl> (x: y: x+y) 2 3
+5
+
+nix-repl> add = x: y: x+y
+
+nix-repl> add 2 3
+5
+
+nix-repl> setKey = v: { key = v; }
+
+nix-repl> setKey 42
+{ key = 42; }
+#+END_EXAMPLE
+* Nix hello world package
+* =/nix/store/=
+* NixOS configuration
+* NixOS binary cache
+#+BEGIN_EXAMPLE
+services.nix-serve = {
+  enable = true;
+  port = 5000; # default
+  secretKeyFile = /var/nix-serve-key.pem;
+};
+#+END_EXAMPLE
+* NixOS Hydra
+* Basic NixOps configuration
+* Building docker containers
+* Help - Where do I go when I get stuck?
+- IRC: =#nixos= on Freenode (I'm =bsima=)
+- Manuals on *nixos.org/nixos/support.html*
+- StackOverflow =nixos= and =nixops= tag
+- =grep= source code on github.com/nixos/nixpkgs
+- GiHub code search (surprisingly helpful)
+- Cheatsheet: nixos.wiki/wiki/Cheatsheet
+- Slides: github.com/bsima/talks
