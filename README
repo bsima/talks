@@ -1,0 +1,4 @@
+Requires nixos.org installed
+
+    $ nix-shell
+    $ make
