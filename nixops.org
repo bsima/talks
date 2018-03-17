@@ -1,13 +1,14 @@
 #+TITLE: Intro to Easy Deployments with NixOps
 #+AUTHOR: Ben Sima
 #+EMAIL: ben@bsima.me
-#+DATE: 2018-03-27 Wed
-#+DESCRIPTION: https://github.com/bsima/talks
+#+DATE: 2018-03-21 Wed
+#+subtitle: https://github.com/bsima/talks
+#+description: https://github.com/bsima/talks
 #+startup: beamer
-#+OPTIONS: H:1 toc:nil
+#+OPTIONS: H:1 toc:nil email:t
 #+OPTIONS: ^:nil
 #+LATEX_CLASS: beamer
-#+LATEX_listingsCLASS_OPTIONS: [presentation]
+#+LATEX_CLASS_OPTIONS: [presentation]
 #+BEAMER_THEME: Boadilla
 #+EPRESENT_FRAME_LEVEL: 1
 * Abstract
@@ -53,7 +54,70 @@ nix-repl> setKey 42
 { key = 42; }
 #+END_EXAMPLE
 * Nix hello world package
-* =/nix/store/=
+hello.nix
+#+BEGIN_EXAMPLE nix
+{ stdenv, fetchurl, perl }:
+
+stdenv.mkDerivation {
+  name = "hello-2.1.1";
+  builder = ./builder.sh;
+  src = fetchurl {
+    url = ftp://ftp.nluug.nl/pub/gnu/hello/hello-2.1.1.tar.gz;
+    sha256 = "1md7jsfd8pa45z73bz1kszpp01yw6x5ljkjk2hx7wl800any6465";
+  };
+  inherit perl;
+}
+#+END_EXAMPLE
+* Nix derivation
+#+BEGIN_EXAMPLE
+$ echo mycontent > myfile
+
+$ nix-repl
+nix-repl> d = derivation { system = "x86_64-linux";
+                           builder = ./myfile;
+                           name = "foo"; }
+«derivation /nix/store/y4h73bmrc9ii5bxg6i7ck6hsf5gqv8ck-foo.drv»
+
+nix-repl> d.outPath
+"/nix/store/hs0yi5n5nw6micqhy8l1igkbhqdkzqa1-foo"
+#+END_EXAMPLE
+* Nix derivation
+#+BEGIN_EXAMPLE
+$ cat /nix/store/y4h73bmrc9ii5bxg6i7ck6hsf5gqv8ck-foo.drv
+Derive(
+  [ ("out","/nix/store/hs0yi5n5nw6micqhy8l1igkbhqdkzqa1-foo","","") ],
+  [], [ "/nix/store/xv2iccirbrvklck36f1g7vldn5v58vck-myfile" ],
+  "x86_64-linux",
+  "/nix/store/xv2iccirbrvklck36f1g7vldn5v58vck-myfile",
+  [],
+  [
+   (
+    "builder",
+    "/nix/store/xv2iccirbrvklck36f1g7vldn5v58vck-myfile"
+   ),
+   ("name","foo"),
+   ("out","/nix/store/hs0yi5n5nw6micqhy8l1igkbhqdkzqa1-foo"),
+   ("system","x86_64-linux")
+  ]
+)
+#+END_EXAMPLE
+* Nix store unique hashes
+1. Compute hash of the file
+   #+BEGIN_EXAMPLE
+   $ nix-hash --type sha256 myfile
+   2bfef67de873c54551d884fdab3055d84d573e654efa79db3c0d7b98883f9ee3
+   #+END_EXAMPLE
+2. Build the string description
+   #+BEGIN_EXAMPLE
+   $ echo -n "source:sha256:2bfef67de873c54551d884fdab3055d84d573e654efa79db3c0d7b98883f9ee3:/nix/store:myfile" \
+     > myfile.str
+   #+END_EXAMPLE
+3. Compute final hash
+   #+BEGIN_EXAMPLE
+   $ nix-hash --type sha256 --truncate \
+     --base32 --flat myfile.str
+   xv2iccirbrvklck36f1g7vldn5v58vck
+   #+END_EXAMPLE
 * NixOS configuration
 * NixOS binary cache
 #+BEGIN_EXAMPLE
@@ -66,6 +130,7 @@ services.nix-serve = {
 * NixOS Hydra
 * Basic NixOps configuration
 * Building docker containers
+* pprjam example
 * Help - Where do I go when I get stuck?
 - IRC: =#nixos= on Freenode (I'm =bsima=)
 - Manuals on *nixos.org/nixos/support.html*
