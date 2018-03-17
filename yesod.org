@@ -1,0 +1,19 @@
+#+TITLE: Getting Started with Yesod
+#+AUTHOR: Ben Sima
+#+EMAIL: ben@bsima.me
+#+DATE: 2018-03-27 Wed
+#+DESCRIPTION: https://github.com/bsima/talks
+#+startup: beamer
+#+OPTIONS: H:1 toc:nil
+#+OPTIONS: ^:nil
+#+LATEX_CLASS: beamer
+#+LATEX_listingsCLASS_OPTIONS: [presentation]
+#+BEAMER_THEME: Boadilla
+#+EPRESENT_FRAME_LEVEL: 1
+* Abstract
+Haskell can be a complex, powerful, highly abstract language. Usually these are
+not features you find in web development like Ruby or Python frameworks. The
+secret I will share with you is that Haskell can be simple, clear, and enjoyable
+to write, even more so than Ruby/Python. This talk will introduce the Yesod web
+framework and illustrate how Yesod's simple abstractions corrall Haskell's
+complexity into an enjoyable and safe value-level language for web programming.
