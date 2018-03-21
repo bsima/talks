@@ -18,6 +18,10 @@ Ocean droplets, or bare-metal data center. Configurations are versioned and can
 be rolled back with a single command. This talk will cover the basics of NixOps,
 the Nix configuration language, and provide resources for how to start using Nix
 today.
+** Follow along:
+- Slides at [[github.com/bsima/talks]]
+- Install Nix via [[nixos.org]]
+- Install NixOps with =nix-env -i nixops=
 * What is Nix?
 - declarative, purely functional language
 - configuration DSL, ecosystem, libraries, package manager
@@ -118,18 +122,106 @@ Derive(
      --base32 --flat myfile.str
    xv2iccirbrvklck36f1g7vldn5v58vck
    #+END_EXAMPLE
+* Nix store tree
+#+BEGIN_EXAMPLE
+$ nix-store --query --tree /nix/store/y4h73bmrc9ii5bxg6i7ck6hsf5gqv8ck-foo.drv
+/nix/store/y4h73bmrc9ii5bxg6i7ck6hsf5gqv8ck-foo.drv
++---/nix/store/xv2iccirbrvklck36f1g7vldn5v58vck-myfile
+#+END_EXAMPLE
+
+** haskell-src-1.0.2.0.drv store tree
+#+BEGIN_EXAMPLE
+$ nix-store --query --tree /nix/store/05gy5ywc...
+#+END_EXAMPLE
+
 * NixOS configuration
+/etc/nixos/configuration.nix
+#+BEGIN_EXAMPLE nix
+{ config, pkgs, ... }:
+
+{
+  imports = [ ./hardware-configuration.nix ];
+
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+
+  networking.hostName = "hal9000";
+  networking.firewall.allowedTCPPorts = [ 22 ];
+  environment.systemPackages = with pkgs; [ emacs ];
+  fonts.fonts = with pkgs; [ google-fonts source-code-pro ];
+  hardware.opengl.enable = true;
+  services.openssh.enable = true;
+}
+#+END_EXAMPLE
 * NixOS binary cache
 #+BEGIN_EXAMPLE
+# on the server:
 services.nix-serve = {
   enable = true;
   port = 5000; # default
   secretKeyFile = /var/nix-serve-key.pem;
 };
+
+# on the client:
+nix.binaryCaches = [ "https://cache.example.org" ];
 #+END_EXAMPLE
 * NixOS Hydra
-* Basic NixOps configuration
+- https://hydra.nixos.org/
+- https://hydra.dhall-lang.org/
+#+BEGIN_EXAMPLE
+services.hydra = {
+  enable = true;
+};
+#+END_EXAMPLE
+* Basic NixOps configuration (1)
+In deployment.nix:
+#+BEGIN_EXAMPLE
+{
+  webserver =
+    { deployment.targetEnv = "virtualbox";
+      services.httpd.enable = true;
+      services.httpd.documentRoot = "/data";
+      fileSystems."/data" =
+        { fsType = "nfs4";
+          device = "fileserver:/"; };
+    };
+
+  fileserver =
+    { deployment.targetEnv = "virtualbox";
+      services.nfs.server.enable = true;
+      services.nfs.server.exports = "...";
+    };
+}
+#+END_EXAMPLE
+* Basic NixOps configuration (2)
+In your shell:
+#+BEGIN_EXAMPLE
+nixops create -d simple deployment.nix
+nixops deploy -d simple
+#+END_EXAMPLE
 * Building docker containers
+- https://nixos.org/nixpkgs/manual/#sec-pkgs-dockerTools
+#+BEGIN_EXAMPLE
+buildImage {
+  name = "redis";
+  tag = "latest";
+  fromImage = someBaseImage;
+  fromImageName = null;
+  fromImageTag = "latest";
+  contents = pkgs.redis;
+  runAsRoot = ''
+    #!${stdenv.shell}
+    mkdir -p /data
+  '';
+  config = {
+    Cmd = [ "/bin/redis-server" ];
+    WorkingDir = "/data";
+    Volumes = {
+      "/data" = {};
+    };
+  };
+}
+#+END_EXAMPLE
 * pprjam example
 * Help - Where do I go when I get stuck?
 - IRC: =#nixos= on Freenode (I'm =bsima=)
