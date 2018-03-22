@@ -246,7 +246,6 @@ buildImage {
   };
 }
 #+END_EXAMPLE
-* pprjam example
 * Help - Where do I go when I get stuck?
 - IRC: =#nixos= on Freenode (I'm =bsima=)
 - Manuals on *nixos.org/nixos/support.html*
