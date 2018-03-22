@@ -29,6 +29,10 @@ today.
 - started as a research project
 - now a full Linux distro
 - yes, it's actually used in production
+** Caveats
+- Nix 2.0
+- nixops is currenly single user
+- everything is in development
 * Nix lang data types
 (Run these examples in =nix-repl=)
 #+BEGIN_EXAMPLE nix
@@ -39,7 +43,8 @@ Hello World.
 The answer is ${toString n}.
 ''
 [ 1 2 3 "hi" 4 ]                   # list
-{ attr = "value" }                 # sets (dictionary)
+s = { attr = "value" }             # sets (dictionary)
+s.attr                             # accessing attributes
 ./src/Makefile                     # first-class paths
 #+END_EXAMPLE
 * Nix lang functions
@@ -48,12 +53,14 @@ nix-repl> (x: y: x+y) 2 3
 5
 
 nix-repl> add = x: y: x+y
-
 nix-repl> add 2 3
 5
 
-nix-repl> setKey = v: { key = v; }
+nix-repl> mul = {x, y, ...}: x * y
+nix-repl> mul {x = 5; y = 2; z = "hello"}
+10
 
+nix-repl> setKey = v: { key = v; }
 nix-repl> setKey 42
 { key = 42; }
 #+END_EXAMPLE
@@ -85,6 +92,9 @@ nix-repl> d = derivation { system = "x86_64-linux";
 nix-repl> d.outPath
 "/nix/store/hs0yi5n5nw6micqhy8l1igkbhqdkzqa1-foo"
 #+END_EXAMPLE
+
+** 3 main artifacts
+expression -> derivation -> build product
 * Nix derivation
 #+BEGIN_EXAMPLE
 $ cat /nix/store/y4h73bmrc9ii5bxg6i7ck6hsf5gqv8ck-foo.drv
@@ -133,7 +143,6 @@ $ nix-store --query --tree /nix/store/y4h73bmrc9ii5bxg6i7ck6hsf5gqv8ck-foo.drv
 #+BEGIN_EXAMPLE
 $ nix-store --query --tree /nix/store/05gy5ywc...
 #+END_EXAMPLE
-
 * NixOS configuration
 /etc/nixos/configuration.nix
 #+BEGIN_EXAMPLE nix
@@ -153,7 +162,21 @@ $ nix-store --query --tree /nix/store/05gy5ywc...
   services.openssh.enable = true;
 }
 #+END_EXAMPLE
+* NixOS -- easy SSL!
+#+BEGIN_EXAMPLE
+services.fail2ban.enable = true;
+services.nginx = {
+  enable = true;
+  virtualHosts."example.com" = {
+    location."/".proxyPass = "http://127.0.0.1:9000";
+    enableACME = true;
+    forceSSL = true;
+  };
+};
+#+END_EXAMPLE
 * NixOS binary cache
+- [[https://cache.nixos.org]]
+- =nix-copy-closure=
 #+BEGIN_EXAMPLE
 # on the server:
 services.nix-serve = {
@@ -168,6 +191,7 @@ nix.binaryCaches = [ "https://cache.example.org" ];
 * NixOS Hydra
 - https://hydra.nixos.org/
 - https://hydra.dhall-lang.org/
+- https://github.com/TaktInc/hail
 #+BEGIN_EXAMPLE
 services.hydra = {
   enable = true;
