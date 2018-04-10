@@ -1,4 +1,4 @@
-#+TITLE: Getting Started with Yesod
+#+TITLE: Getting Started with Yesod (in anger)
 #+AUTHOR: Ben Sima
 #+EMAIL: ben@bsima.me
 #+DATE: 2018-04-10 Tue
@@ -21,32 +21,204 @@ than in Ruby/Python. This talk will introduce the Yesod web framework and
 illustrate how Yesod's simple abstractions corral Haskell's complexity into an
 enjoyable and safe value-level language for web programming.
 * What is Yesod?
-
+- web framework (MVC)
+- set of libraries
+- a few "DSL"s
+- a typeclass(es)
 * Pros and Cons of Yesod
+- =+= Batteries included
+- =+= Established tech (SQL, HTML, forms, MVC)
+- =+= Fast & reusable widgets
+- =+= Type safe routing, form validation, DB queries
+- =+= Cross compilation? Mobile/desktop?
+- =±= jQuery
+- =±= Opinionated
+- =-= Non-SPA
+- =-= SQL
 * Alternatives
-- miso or reflex-dom
+- [[https://haskell-miso.org/][miso]] or [[https://github.com/reflex-frp/reflex-platform][reflex-dom]]
   - Haskell in the browser, GHCjs
-- servant
+- [[http://haskell-servant.readthedocs.io/en/stable/][servant]]
   - type-level routing
-- acid-state (happstack)
+- [[https://github.com/acid-state/][acid-state]] ([[http://happstack.com/page/view-page-slug/1/happstack][happstack]])
   - give ACID guarantees to any Haskell datatype
-- snap / scotty
+- [[http://snapframework.com/][snap]] / [[https://github.com/scotty-web/scotty][scotty]]
   - lightweight "web frameworks"
 * Yesod architecture - MVC
+#+BEGIN_EXAMPLE
+src/
+  Handler/Home.hs
+  Helper/Mailchimp.hs
+  Settings.hs
+  Application.hs
+  Foundation.hs
+templates/
+  home.hamlet
+  home.{lucius,cassius}
+  home.julius
+config/
+  models
+  routes
+  settings.yml
+#+END_EXAMPLE
 * Model (Persistent)
-* View (Shakespeare)
+Defining an example model
+** DSL (config/models)                                                :BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.3
+:BEAMER_env: block
+:END:
+#+BEGIN_EXAMPLE
+Entry
+  author UserId
+  content Markdown
+  title Text Maybe
+  pubdate UTCTime
+  deriving Show Eq
+
+User
+  name Text
+#+END_EXAMPLE
+** Generated Haskell                                                  :BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.6
+:BEAMER_env: block
+:END:
+#+BEGIN_EXAMPLE hs
+data Entry = Entry
+  { entryAuthor :: UserId
+  , entryContent :: Markdown
+  , entryTitle :: Maybe Text
+  , entryPubdate :: UTCTime
+  }
+  deriving (Show, Eq, ...)
+
+data User = User
+  { userName :: Text }
+#+END_EXAMPLE
+* Routes
+config/routes:
+#+BEGIN_EXAMPLE haskell
+/home HomeR GET
+/entries EntriesR GET POST
+/entries/#EntryId EntryR GET POST DELETE
+!/entries/new EntryNewR GET POST
+#+END_EXAMPLE
 * Controller (Haskell)
+#+BEGIN_EXAMPLE haskell
+getEntryR :: EntryId -> Handler Html
+getEntryR entryId = do
+  entry <- runDB $ get404 entryId
+  author <- runDB $ get (entryAuthor entry)
+  defaultLayout $(widgetFile "entry")
+#+END_EXAMPLE
+* View (Shakespeare)
+#+BEGIN_EXAMPLE html
+<div #entry-#{entryId entry}>
+  $maybe title <- entryTitle entry
+    <h1>#{title}
+  $nothing
+    <div .no-title>
+  <p .by-line>
+    By #{userName author} on #{fmtDate $ entryPubdate entry}
+  <article>
+    #{markdownToHtml $ entryContent entry}
+#+END_EXAMPLE
 * Forms
-* Type safe HTML
-* Type safe JS (kinda)
-* Type safe CSS
+Displaying a form:
+#+BEGIN_EXAMPLE haskell
+entryForm :: AForm Handler Entry
+entryForm = Entry
+  <$> areq textField "Title" Nothing
+  <*> areq markdownField "Article" Nothing
+
+
+getEntryNewR :: Handler Html
+getEntryNewR = do
+  (widget, enctype) <- generateFormPost entryForm
+  defaultLayout $(widgetFile "entry-new")
+#+END_EXAMPLE
+* Forms
+Posting a form:
+#+BEGIN_EXAMPLE haskell
+entryForm :: AForm Handler Entry
+entryForm = Entry
+  <$> areq textField "Title" Nothing
+  <*> areq markdownField "Article" Nothing
+
+
+postEntryNewR :: Handler Html
+postEntryNewR = do
+  ((res, widget), enctype) <- runFormPost entryForm
+  (userId, user) <- requireAuthPair
+  case res of
+    FormSuccess entry -> do
+      entryId <- runDB $ insert $ entry {entryAuthor = userId}
+      redirect $ EntryR entryId
+    _ -> defaultLayout $(widgetFile "entry-new")
+#+END_EXAMPLE
 * Widgets
+#+BEGIN_EXAMPLE haskell
+addToLibrary :: UserId -> RefId -> Widget
+addToLibrary uid refId = do
+  libFormId <- newIdent
+  mlib <- handlerToWidget $ runDB $ getBy $ UniqEntry uid refId
+  let (icon, txt) = case mlib of
+        Nothing -> ("oi-plus", "Add to your library") :: (Text, Text)
+        Just _ -> ("oi-check", "In your library") :: (Text, Text)
+  toWidget [julius|
+<JS from next slide>
+|]
+  toWidget [whamlet|
+<form .form-horizontal ##{libFormId}>
+  <button .card-text.btn.btn-success.clickable.align-middle type=submit>
+    <i .oi.#{icon}.align-middle aria-hidden="true">
+    <span .align-middle>
+      #{txt}
+|]
+#+END_EXAMPLE
+* Type safe JS (kinda)
+#+BEGIN_EXAMPLE javascript
+$("##{rawJS libFormId}").submit(function(event){
+  event.preventDefault();
+  $.ajax({
+    url: '@{LibraryR}',
+    type: 'POST',
+    contentType: "application/json",
+    data: JSON.stringify({refId: #{toJSON $ fromSqlKey refId}}),
+    success: function (data) {
+      $("##{rawJS libFormId} > button > i").removeClass("oi-plus");
+      $("##{rawJS libFormId} > button > i").addClass("oi-check");
+      $("##{rawJS libFormId} > button > span").text("In your library");
+    },
+    error: function (data) {
+      console.warn("Error: " + data);
+    },
+  });
+});
+#+END_EXAMPLE
 * Content Negotiation - TypedContent
+#+BEGIN_EXAMPLE haskell
+getEntryR :: EntryId -> Handler TypedContent
+getEntryR entryId = do
+  entry <- runDB $ get404 entryId
+  selectRep $ do
+    provideRep $ defaultLayout $ [whamlet|#{entry}|]
+    provideJson entry
+    provideRepType "text/csv" $ Csv.encode entry
+#+END_EXAMPLE
 * The Yesod Typeclass
+https://www.stackage.org/haddock/nightly-2018-04-03/yesod-core-1.6.2/Yesod-Core.html
 * Yesod Auth
+Yesod ships with authentication:
+- OpenID
+- OAuth
+- Email/Password
 * Help - Where do I go when I get stuck?
 - IRC on Freenode (I'm =bsima=)
   - =#yesod=
   - =#haskell-beginners=
   - =#haskell=
 - Yesod book: [[https://yesodweb.com/book][yesodweb.com/book]]
+- Haskell-cafe / Haskell-beginners mailing lists
+- Slides: [[https://github.com/bsima/talks][github.com/bsima/talks]]
