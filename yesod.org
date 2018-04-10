@@ -1,10 +1,11 @@
 #+TITLE: Getting Started with Yesod
 #+AUTHOR: Ben Sima
 #+EMAIL: ben@bsima.me
-#+DATE: 2018-03-27 Wed
+#+DATE: 2018-04-10 Tue
+#+subtitle: https://github.com/bsima/talks
 #+DESCRIPTION: https://github.com/bsima/talks
 #+startup: beamer
-#+OPTIONS: H:1 toc:nil
+#+OPTIONS: H:1 toc:nil email:t
 #+OPTIONS: ^:nil
 #+LATEX_CLASS: beamer
 #+LATEX_listingsCLASS_OPTIONS: [presentation]
@@ -12,8 +13,40 @@
 #+EPRESENT_FRAME_LEVEL: 1
 * Abstract
 Haskell can be a complex, powerful, highly abstract language. Usually these are
-not features you find in web development like Ruby or Python frameworks. The
-secret I will share with you is that Haskell can be simple, clear, and enjoyable
-to write, even more so than Ruby/Python. This talk will introduce the Yesod web
-framework and illustrate how Yesod's simple abstractions corrall Haskell's
-complexity into an enjoyable and safe value-level language for web programming.
+not features you want in web development, however. That's why popular frameworks
+in languages such as Ruby or Python emphasize, "simple", "easy" and "it just
+works". This talk will share with you a Haskell secret: coding for the web in
+Haskell can be clear, simple, and enjoyable to write, potentially even more so
+than in Ruby/Python. This talk will introduce the Yesod web framework and
+illustrate how Yesod's simple abstractions corral Haskell's complexity into an
+enjoyable and safe value-level language for web programming.
+* What is Yesod?
+
+* Pros and Cons of Yesod
+* Alternatives
+- miso or reflex-dom
+  - Haskell in the browser, GHCjs
+- servant
+  - type-level routing
+- acid-state (happstack)
+  - give ACID guarantees to any Haskell datatype
+- snap / scotty
+  - lightweight "web frameworks"
+* Yesod architecture - MVC
+* Model (Persistent)
+* View (Shakespeare)
+* Controller (Haskell)
+* Forms
+* Type safe HTML
+* Type safe JS (kinda)
+* Type safe CSS
+* Widgets
+* Content Negotiation - TypedContent
+* The Yesod Typeclass
+* Yesod Auth
+* Help - Where do I go when I get stuck?
+- IRC on Freenode (I'm =bsima=)
+  - =#yesod=
+  - =#haskell-beginners=
+  - =#haskell=
+- Yesod book: [[https://yesodweb.com/book][yesodweb.com/book]]
