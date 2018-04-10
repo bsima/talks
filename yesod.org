@@ -157,6 +157,14 @@ postEntryNewR = do
       redirect $ EntryR entryId
     _ -> defaultLayout $(widgetFile "entry-new")
 #+END_EXAMPLE
+* Forms
+entry-new.hamlet
+#+BEGIN_EXAMPLE haskell
+<form #new-entry-form .form-control method=post
+      action=@{EntryNewR} enctype=#{enctype}>
+  ^{widget}
+  <button .btn.btn-default>Submit!
+#+END_EXAMPLE
 * Widgets
 #+BEGIN_EXAMPLE haskell
 addToLibrary :: UserId -> RefId -> Widget
