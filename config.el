@@ -11,7 +11,7 @@
  org-publish-use-timestamps-flag nil
  org-publish-project-alist
  '(("talks"
-    :base-directory "."
+    :base-directory "src"
     :base-extension "org"
     :publishing-directory "./public"
     :publishing-function org-reveal-publish-to-reveal
