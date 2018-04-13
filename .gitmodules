@@ -4,3 +4,6 @@
 [submodule "org-reveal"]
 	path = org-reveal
 	url = https://github.com/yjwen/org-reveal.git
+[submodule "docs/revealjs"]
+	path = docs/revealjs
+	url = https://github.com/hakimel/reveal.js.git
