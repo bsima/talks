@@ -17,7 +17,7 @@
 #+REVEAL_HEAD_PREAMBLE: <meta name="description" content="Getting started with Yesod.">
 #+REVEAL_POSTAMBLE: <p> Created by Ben Sima. </p>
 #+REVEAL_PLUGINS: (notes)
-#+REVEAL_ROOT: https://revealjs.com/
+#+REVEAL_ROOT: https://bsima.github.io/talks/
 
 * Abstract
 NixOps is a declarative deployment tool and language for Linux. The same
