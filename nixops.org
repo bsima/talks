@@ -1,16 +1,24 @@
 #+TITLE: Intro to Easy Deployments with NixOps
 #+AUTHOR: Ben Sima
 #+EMAIL: ben@bsima.me
-#+DATE: 2018-03-21 Wed
-#+subtitle: https://github.com/bsima/talks
 #+description: https://github.com/bsima/talks
-#+startup: beamer
-#+OPTIONS: H:1 toc:nil email:t
-#+OPTIONS: ^:nil
-#+LATEX_CLASS: beamer
-#+LATEX_CLASS_OPTIONS: [presentation]
-#+BEAMER_THEME: Boadilla
-#+EPRESENT_FRAME_LEVEL: 1
+
+#+OPTIONS: toc:nil email:t num:nil
+#+OPTIONS: reveal_center:t reveal_progress:t reveal_history:nil
+#+OPTIONS: reveal_keyboard:t reveal_overview:t reveal_control:t
+#+OPTIONS: reveal_width:1200 reveal_height:800
+
+#+REVEAL_MARGIN: 0.1
+#+REVEAL_MIN_SCALE: 0.5
+#+REVEAL_MAX_SCALE: 2.5
+#+REVEAL_TRANS: slide
+#+REVEAL_THEME: solarized
+#+REVEAL_HLEVEL: 1
+#+REVEAL_HEAD_PREAMBLE: <meta name="description" content="Getting started with Yesod.">
+#+REVEAL_POSTAMBLE: <p> Created by Ben Sima. </p>
+#+REVEAL_PLUGINS: (notes)
+#+REVEAL_ROOT: https://revealjs.com/
+
 * Abstract
 NixOps is a declarative deployment tool and language for Linux. The same
 configuration for your local VM will also deploy to your AWS cluster, Digital
@@ -19,8 +27,8 @@ be rolled back with a single command. This talk will cover the basics of NixOps,
 the Nix configuration language, and provide resources for how to start using Nix
 today.
 ** Follow along:
-- Slides at [[github.com/bsima/talks]]
-- Install Nix via [[nixos.org]]
+- Slides at [[https://github.com/bsima/talks][github.com/bsima/talks]]
+- Install Nix via [[https://nixos.org][nixos.org]]
 - Install NixOps with =nix-env -i nixops=
 * What is Nix?
 - declarative, purely functional language

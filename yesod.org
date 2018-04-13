@@ -1,16 +1,23 @@
 #+TITLE: Getting Started with Yesod (in anger)
 #+AUTHOR: Ben Sima
 #+EMAIL: ben@bsima.me
-#+DATE: 2018-04-10 Tue
-#+subtitle: https://github.com/bsima/talks
-#+DESCRIPTION: https://github.com/bsima/talks
-#+startup: beamer
-#+OPTIONS: H:1 toc:nil email:t
-#+OPTIONS: ^:nil
-#+LATEX_CLASS: beamer
-#+LATEX_listingsCLASS_OPTIONS: [presentation]
-#+BEAMER_THEME: Boadilla
-#+EPRESENT_FRAME_LEVEL: 1
+
+#+OPTIONS: toc:nil email:t num:nil
+#+OPTIONS: reveal_center:t reveal_progress:t reveal_history:nil
+#+OPTIONS: reveal_keyboard:t reveal_overview:t reveal_control:t
+#+OPTIONS: reveal_width:1200 reveal_height:800
+
+#+REVEAL_MARGIN: 0.1
+#+REVEAL_MIN_SCALE: 0.5
+#+REVEAL_MAX_SCALE: 2.5
+#+REVEAL_TRANS: slide
+#+REVEAL_THEME: solarized
+#+REVEAL_HLEVEL: 1
+#+REVEAL_HEAD_PREAMBLE: <meta name="description" content="Getting started with Yesod.">
+#+REVEAL_POSTAMBLE: <p> Created by Ben Sima. </p>
+#+REVEAL_PLUGINS: (notes)
+#+REVEAL_ROOT: https://revealjs.com/
+
 * Abstract
 Haskell can be a complex, powerful, highly abstract language. Usually these are
 not features you want in web development, however. That's why popular frameworks
@@ -25,7 +32,7 @@ enjoyable and safe value-level language for web programming.
 - set of libraries
 - a few "DSL"s
 - a typeclass(es)
-* Pros and Cons of Yesod
+** Pros and Cons of Yesod
 - =+= Batteries included
 - =+= Established tech (SQL, HTML, forms, MVC)
 - =+= Fast & reusable widgets
@@ -35,7 +42,7 @@ enjoyable and safe value-level language for web programming.
 - =±= Opinionated
 - =-= Non-SPA
 - =-= SQL
-* Alternatives
+** Alternatives
 - [[https://haskell-miso.org/][miso]] or [[https://github.com/reflex-frp/reflex-platform][reflex-dom]]
   - Haskell in the browser, GHCjs
 - [[http://haskell-servant.readthedocs.io/en/stable/][servant]]
@@ -45,7 +52,7 @@ enjoyable and safe value-level language for web programming.
 - [[http://snapframework.com/][snap]] / [[https://github.com/scotty-web/scotty][scotty]]
   - lightweight "web frameworks"
 * Yesod architecture - MVC
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC
 src/
   Handler/Home.hs
   Helper/Mailchimp.hs
@@ -60,15 +67,11 @@ config/
   models
   routes
   settings.yml
-#+END_EXAMPLE
+#+END_SRC
 * Model (Persistent)
 Defining an example model
-** DSL (config/models)                                                :BMCOL:
-:PROPERTIES:
-:BEAMER_col: 0.3
-:BEAMER_env: block
-:END:
-#+BEGIN_EXAMPLE
+*** DSL (config/models)
+#+BEGIN_SRC
 Entry
   author UserId
   content Markdown
@@ -78,13 +81,9 @@ Entry
 
 User
   name Text
-#+END_EXAMPLE
-** Generated Haskell                                                  :BMCOL:
-:PROPERTIES:
-:BEAMER_col: 0.6
-:BEAMER_env: block
-:END:
-#+BEGIN_EXAMPLE hs
+#+END_SRC
+*** Generated Haskell
+#+BEGIN_SRC haskell
 data Entry = Entry
   { entryAuthor :: UserId
   , entryContent :: Markdown
@@ -95,25 +94,25 @@ data Entry = Entry
 
 data User = User
   { userName :: Text }
-#+END_EXAMPLE
+#+END_SRC
 * Routes
 config/routes:
-#+BEGIN_EXAMPLE haskell
+#+BEGIN_SRC haskell
 /home HomeR GET
 /entries EntriesR GET POST
 /entries/#EntryId EntryR GET POST DELETE
 !/entries/new EntryNewR GET POST
-#+END_EXAMPLE
+#+END_SRC
 * Controller (Haskell)
-#+BEGIN_EXAMPLE haskell
+#+BEGIN_SRC haskell
 getEntryR :: EntryId -> Handler Html
 getEntryR entryId = do
   entry <- runDB $ get404 entryId
   author <- runDB $ get (entryAuthor entry)
   defaultLayout $(widgetFile "entry")
-#+END_EXAMPLE
+#+END_SRC
 * View (Shakespeare)
-#+BEGIN_EXAMPLE html
+#+BEGIN_SRC html
 <div #entry-#{entryId entry}>
   $maybe title <- entryTitle entry
     <h1>#{title}
@@ -123,10 +122,14 @@ getEntryR entryId = do
     By #{userName author} on #{fmtDate $ entryPubdate entry}
   <article>
     #{markdownToHtml $ entryContent entry}
-#+END_EXAMPLE
+#+END_SRC
 * Forms
-Displaying a form:
-#+BEGIN_EXAMPLE haskell
+#+BEGIN_NOTES
+Forms are the primary boundary between the server and the user. In Yesod, input
+fields are generated and type-checked automatically.
+#+END_NOTES
+** Displaying a form:
+#+BEGIN_SRC haskell
 entryForm :: AForm Handler Entry
 entryForm = Entry
   <$> areq textField "Title" Nothing
@@ -137,10 +140,9 @@ getEntryNewR :: Handler Html
 getEntryNewR = do
   (widget, enctype) <- generateFormPost entryForm
   defaultLayout $(widgetFile "entry-new")
-#+END_EXAMPLE
-* Forms
-Posting a form:
-#+BEGIN_EXAMPLE haskell
+#+END_SRC
+** Posting a form:
+#+BEGIN_SRC haskell
 entryForm :: AForm Handler Entry
 entryForm = Entry
   <$> areq textField "Title" Nothing
@@ -156,17 +158,24 @@ postEntryNewR = do
       entryId <- runDB $ insert $ entry {entryAuthor = userId}
       redirect $ EntryR entryId
     _ -> defaultLayout $(widgetFile "entry-new")
-#+END_EXAMPLE
-* Forms
+#+END_SRC
+** The end result
 entry-new.hamlet
-#+BEGIN_EXAMPLE haskell
+#+BEGIN_SRC haskell
 <form #new-entry-form .form-control method=post
       action=@{EntryNewR} enctype=#{enctype}>
   ^{widget}
   <button .btn.btn-default>Submit!
-#+END_EXAMPLE
+#+END_SRC
 * Widgets
-#+BEGIN_EXAMPLE haskell
+Reusable combinations of:
+
+- HTML
+- CSS
+- JavaScript
+- Haskell
+** Haskell
+#+BEGIN_SRC haskell
 addToLibrary :: UserId -> RefId -> Widget
 addToLibrary uid refId = do
   libFormId <- newIdent
@@ -184,9 +193,9 @@ addToLibrary uid refId = do
     <span .align-middle>
       #{txt}
 |]
-#+END_EXAMPLE
-* Type safe JS (kinda)
-#+BEGIN_EXAMPLE javascript
+#+END_SRC
+** Type safe JS (kinda)
+#+BEGIN_SRC javascript
 $("##{rawJS libFormId}").submit(function(event){
   event.preventDefault();
   $.ajax({
@@ -204,9 +213,9 @@ $("##{rawJS libFormId}").submit(function(event){
     },
   });
 });
-#+END_EXAMPLE
+#+END_SRC
 * Content Negotiation - TypedContent
-#+BEGIN_EXAMPLE haskell
+#+BEGIN_SRC haskell
 getEntryR :: EntryId -> Handler TypedContent
 getEntryR entryId = do
   entry <- runDB $ get404 entryId
@@ -214,7 +223,7 @@ getEntryR entryId = do
     provideRep $ defaultLayout $ [whamlet|#{entry}|]
     provideJson entry
     provideRepType "text/csv" $ Csv.encode entry
-#+END_EXAMPLE
+#+END_SRC
 * The Yesod Typeclass
 https://www.stackage.org/haddock/nightly-2018-04-03/yesod-core-1.6.2/Yesod-Core.html
 * Yesod Auth
