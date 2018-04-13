@@ -4,4 +4,4 @@ all:
 
 .PHONY: clean
 clean:
-	rm -rf ./*.pdf ./*.html ./*.tex public
+	rm -rf ./*.pdf ./*.html ./*.tex

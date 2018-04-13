@@ -13,7 +13,7 @@
  '(("talks"
     :base-directory "src"
     :base-extension "org"
-    :publishing-directory "./public"
+    :publishing-directory "./docs"
     :publishing-function org-reveal-publish-to-reveal
     :headline-levels 4
     :auto-preamble t)))
