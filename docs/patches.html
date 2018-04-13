@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>A Categorical Theory of Patches</title>
+<meta name="author" content="(Ben Sima)"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://revealjs.com/css/reveal.css"/>
+
+<link rel="stylesheet" href="https://revealjs.com/css/theme/solarized.css" id="theme"/>
+
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://revealjs.com/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+<meta name="description" content="Getting started with Yesod.">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">A Categorical Theory of Patches</h1><h2 class="author">Ben Sima</h2><h2 class="email"><a href="mailto:ben@bsima.me">ben@bsima.me</a></h2><p class="date">Created: 2018-04-12 Thu 21:24</p>
+</section>
+
+<section>
+<section id="slide-orgf693c49">
+<h2 id="orgf693c49">A headline</h2>
+</section>
+</section>
+<section>
+<section id="slide-org54f5708">
+<h2 id="org54f5708">Second headline</h2>
+<div class="outline-text-2" id="text-org54f5708">
+</div>
+</section>
+<section id="slide-orgc7f07ba">
+<h3 id="orgc7f07ba">Sub headline</h3>
+<div class="outline-text-3" id="text-orgc7f07ba">
+</div>
+</section>
+<section id="slide-orgf26c57e">
+<h4 id="orgf26c57e">Sub-sub headline</h4>
+</section>
+</section>
+</div>
+</div>
+<p> Created by Ben Sima. </p>
+<script src="https://revealjs.com/lib/js/head.min.js"></script>
+<script src="https://revealjs.com/js/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: 'c',
+rollingLinks: false,
+keyboard: true,
+overview: true,
+width: 1200,
+height: 800,
+margin: 0.10,
+minScale: 0.50,
+maxScale: 2.50,
+
+theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+transition: Reveal.getQueryHash().transition || 'slide', // default/cube/page/concave/zoom/linear/fade/none
+transitionSpeed: 'default',
+multiplex: {
+    secret: '', // null if client
+    id: '', // id, obtained from socket.io server
+    url: '' // Location of socket.io server
+},
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'https://revealjs.com/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+});
+</script>
+</body>
+</html>

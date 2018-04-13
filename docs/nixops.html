@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Intro to Easy Deployments with NixOps</title>
+<meta name="author" content="(Ben Sima)"/>
+<meta name="description" content="https://github.com/bsima/talks"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://revealjs.com/css/reveal.css"/>
+
+<link rel="stylesheet" href="https://revealjs.com/css/theme/solarized.css" id="theme"/>
+
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://revealjs.com/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+<meta name="description" content="Getting started with Yesod.">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">Intro to Easy Deployments with NixOps</h1><h2 class="author">Ben Sima</h2><h2 class="email"><a href="mailto:ben@bsima.me">ben@bsima.me</a></h2><p class="date">Created: 2018-04-12 Thu 21:24</p>
+</section>
+
+<section>
+<section id="slide-orgbf57e59">
+<h2 id="orgbf57e59">Abstract</h2>
+<p>
+NixOps is a declarative deployment tool and language for Linux. The same
+configuration for your local VM will also deploy to your AWS cluster, Digital
+Ocean droplets, or bare-metal data center. Configurations are versioned and can
+be rolled back with a single command. This talk will cover the basics of NixOps,
+the Nix configuration language, and provide resources for how to start using Nix
+today.
+</p>
+</section>
+<section id="slide-org7dacac8">
+<h3 id="org7dacac8">Follow along:</h3>
+<ul>
+<li>Slides at <a href="https://github.com/bsima/talks">github.com/bsima/talks</a></li>
+<li>Install Nix via <a href="https://nixos.org">nixos.org</a></li>
+<li>Install NixOps with <code>nix-env -i nixops</code></li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org89a6c7b">
+<h2 id="org89a6c7b">What is Nix?</h2>
+<ul>
+<li>declarative, purely functional language</li>
+<li>configuration DSL, ecosystem, libraries, package manager</li>
+<li>build system?</li>
+<li>started as a research project</li>
+<li>now a full Linux distro</li>
+<li>yes, it's actually used in production</li>
+
+</ul>
+</section>
+<section id="slide-orgcf5b0b0">
+<h3 id="orgcf5b0b0">Caveats</h3>
+<ul>
+<li>Nix 2.0</li>
+<li>nixops is currenly single user</li>
+<li>everything is in development</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org0ebe203">
+<h2 id="org0ebe203">Nix lang data types</h2>
+<p>
+(Run these examples in <code>nix-repl</code>)
+</p>
+<pre class="example">
+n = 42                             # variables
+"Hello World, ${toString n}"       # strings
+''                                 # multiline strings
+Hello World.
+The answer is ${toString n}.
+''
+[ 1 2 3 "hi" 4 ]                   # list
+s = { attr = "value" }             # sets (dictionary)
+s.attr                             # accessing attributes
+./src/Makefile                     # first-class paths
+</pre>
+</section>
+</section>
+<section>
+<section id="slide-orge71f873">
+<h2 id="orge71f873">Nix lang functions</h2>
+<pre class="example">
+nix-repl&gt; (x: y: x+y) 2 3
+5
+
+nix-repl&gt; add = x: y: x+y
+nix-repl&gt; add 2 3
+5
+
+nix-repl&gt; mul = {x, y, ...}: x * y
+nix-repl&gt; mul {x = 5; y = 2; z = "hello"}
+10
+
+nix-repl&gt; setKey = v: { key = v; }
+nix-repl&gt; setKey 42
+{ key = 42; }
+</pre>
+</section>
+</section>
+<section>
+<section id="slide-org0d6a713">
+<h2 id="org0d6a713">Nix hello world package</h2>
+<p>
+hello.nix
+</p>
+<pre class="example">
+{ stdenv, fetchurl, perl }:
+
+stdenv.mkDerivation {
+  name = "hello-2.1.1";
+  builder = ./builder.sh;
+  src = fetchurl {
+    url = ftp://ftp.nluug.nl/pub/gnu/hello/hello-2.1.1.tar.gz;
+    sha256 = "1md7jsfd8pa45z73bz1kszpp01yw6x5ljkjk2hx7wl800any6465";
+  };
+  inherit perl;
+}
+</pre>
+</section>
+</section>
+<section>
+<section id="slide-org4562ea5">
+<h2 id="org4562ea5">Nix derivation</h2>
+<pre class="example">
+$ echo mycontent &gt; myfile
+
+$ nix-repl
+nix-repl&gt; d = derivation { system = "x86_64-linux";
+                           builder = ./myfile;
+                           name = "foo"; }
+«derivation /nix/store/y4h73bmrc9ii5bxg6i7ck6hsf5gqv8ck-foo.drv»
+
+nix-repl&gt; d.outPath
+"/nix/store/hs0yi5n5nw6micqhy8l1igkbhqdkzqa1-foo"
+</pre>
+
+</section>
+<section id="slide-org4dd5c58">
+<h3 id="org4dd5c58">3 main artifacts</h3>
+<p>
+expression -&gt; derivation -&gt; build product
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org8a0f4e0">
+<h2 id="org8a0f4e0">Nix derivation</h2>
+<pre class="example">
+$ cat /nix/store/y4h73bmrc9ii5bxg6i7ck6hsf5gqv8ck-foo.drv
+Derive(
+  [ ("out","/nix/store/hs0yi5n5nw6micqhy8l1igkbhqdkzqa1-foo","","") ],
+  [], [ "/nix/store/xv2iccirbrvklck36f1g7vldn5v58vck-myfile" ],
+  "x86_64-linux",
+  "/nix/store/xv2iccirbrvklck36f1g7vldn5v58vck-myfile",
+  [],
+  [
+   (
+    "builder",
+    "/nix/store/xv2iccirbrvklck36f1g7vldn5v58vck-myfile"
+   ),
+   ("name","foo"),
+   ("out","/nix/store/hs0yi5n5nw6micqhy8l1igkbhqdkzqa1-foo"),
+   ("system","x86_64-linux")
+  ]
+)
+</pre>
+</section>
+</section>
+<section>
+<section id="slide-orgb0a5630">
+<h2 id="orgb0a5630">Nix store unique hashes</h2>
+<ol>
+<li><p>
+Compute hash of the file
+</p>
+<pre class="example">
+$ nix-hash --type sha256 myfile
+2bfef67de873c54551d884fdab3055d84d573e654efa79db3c0d7b98883f9ee3
+</pre></li>
+<li><p>
+Build the string description
+</p>
+<pre class="example">
+$ echo -n "source:sha256:2bfef67de873c54551d884fdab3055d84d573e654efa79db3c0d7b98883f9ee3:/nix/store:myfile" \
+  &gt; myfile.str
+</pre></li>
+<li><p>
+Compute final hash
+</p>
+<pre class="example">
+$ nix-hash --type sha256 --truncate \
+  --base32 --flat myfile.str
+xv2iccirbrvklck36f1g7vldn5v58vck
+</pre></li>
+
+</ol>
+</section>
+</section>
+<section>
+<section id="slide-orgc919eac">
+<h2 id="orgc919eac">Nix store tree</h2>
+<pre class="example">
+$ nix-store --query --tree /nix/store/y4h73bmrc9ii5bxg6i7ck6hsf5gqv8ck-foo.drv
+/nix/store/y4h73bmrc9ii5bxg6i7ck6hsf5gqv8ck-foo.drv
++---/nix/store/xv2iccirbrvklck36f1g7vldn5v58vck-myfile
+</pre>
+
+</section>
+<section id="slide-org5831a52">
+<h3 id="org5831a52">haskell-src-1.0.2.0.drv store tree</h3>
+<pre class="example">
+$ nix-store --query --tree /nix/store/05gy5ywc...
+</pre>
+</section>
+</section>
+<section>
+<section id="slide-org8f18a25">
+<h2 id="org8f18a25">NixOS configuration</h2>
+<p>
+/etc/nixos/configuration.nix
+</p>
+<pre class="example">
+{ config, pkgs, ... }:
+
+{
+  imports = [ ./hardware-configuration.nix ];
+
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+
+  networking.hostName = "hal9000";
+  networking.firewall.allowedTCPPorts = [ 22 ];
+  environment.systemPackages = with pkgs; [ emacs ];
+  fonts.fonts = with pkgs; [ google-fonts source-code-pro ];
+  hardware.opengl.enable = true;
+  services.openssh.enable = true;
+}
+</pre>
+</section>
+</section>
+<section>
+<section id="slide-orgbd63590">
+<h2 id="orgbd63590">NixOS &#x2013; easy SSL!</h2>
+<pre class="example">
+services.fail2ban.enable = true;
+services.nginx = {
+  enable = true;
+  virtualHosts."example.com" = {
+    location."/".proxyPass = "http://127.0.0.1:9000";
+    enableACME = true;
+    forceSSL = true;
+  };
+};
+</pre>
+</section>
+</section>
+<section>
+<section id="slide-org3a88ce6">
+<h2 id="org3a88ce6">NixOS binary cache</h2>
+<ul>
+<li><a href="https://cache.nixos.org">https://cache.nixos.org</a></li>
+<li><code>nix-copy-closure</code></li>
+
+</ul>
+<pre class="example">
+# on the server:
+services.nix-serve = {
+  enable = true;
+  port = 5000; # default
+  secretKeyFile = /var/nix-serve-key.pem;
+};
+
+# on the client:
+nix.binaryCaches = [ "https://cache.example.org" ];
+</pre>
+</section>
+</section>
+<section>
+<section id="slide-org604fa56">
+<h2 id="org604fa56">NixOS Hydra</h2>
+<ul>
+<li><a href="https://hydra.nixos.org/">https://hydra.nixos.org/</a></li>
+<li><a href="https://hydra.dhall-lang.org/">https://hydra.dhall-lang.org/</a></li>
+<li><a href="https://github.com/TaktInc/hail">https://github.com/TaktInc/hail</a></li>
+
+</ul>
+<pre class="example">
+services.hydra = {
+  enable = true;
+};
+</pre>
+</section>
+</section>
+<section>
+<section id="slide-org96d1307">
+<h2 id="org96d1307">Basic NixOps configuration (1)</h2>
+<p>
+In deployment.nix:
+</p>
+<pre class="example">
+{
+  webserver =
+    { deployment.targetEnv = "virtualbox";
+      services.httpd.enable = true;
+      services.httpd.documentRoot = "/data";
+      fileSystems."/data" =
+        { fsType = "nfs4";
+          device = "fileserver:/"; };
+    };
+
+  fileserver =
+    { deployment.targetEnv = "virtualbox";
+      services.nfs.server.enable = true;
+      services.nfs.server.exports = "...";
+    };
+}
+</pre>
+</section>
+</section>
+<section>
+<section id="slide-org48a1b30">
+<h2 id="org48a1b30">Basic NixOps configuration (2)</h2>
+<p>
+In your shell:
+</p>
+<pre class="example">
+nixops create -d simple deployment.nix
+nixops deploy -d simple
+</pre>
+</section>
+</section>
+<section>
+<section id="slide-org0add5da">
+<h2 id="org0add5da">Building docker containers</h2>
+<ul>
+<li><a href="https://nixos.org/nixpkgs/manual/#sec-pkgs-dockerTools">https://nixos.org/nixpkgs/manual/#sec-pkgs-dockerTools</a></li>
+
+</ul>
+<pre class="example">
+buildImage {
+  name = "redis";
+  tag = "latest";
+  fromImage = someBaseImage;
+  fromImageName = null;
+  fromImageTag = "latest";
+  contents = pkgs.redis;
+  runAsRoot = ''
+    #!${stdenv.shell}
+    mkdir -p /data
+  '';
+  config = {
+    Cmd = [ "/bin/redis-server" ];
+    WorkingDir = "/data";
+    Volumes = {
+      "/data" = {};
+    };
+  };
+}
+</pre>
+</section>
+</section>
+<section>
+<section id="slide-org2c4792d">
+<h2 id="org2c4792d">Help - Where do I go when I get stuck?</h2>
+<ul>
+<li>IRC: <code>#nixos</code> on Freenode (I'm <code>bsima</code>)</li>
+<li>Manuals on <b>nixos.org/nixos/support.html</b></li>
+<li>StackOverflow <code>nixos</code> and <code>nixops</code> tag</li>
+<li><code>grep</code> source code on github.com/nixos/nixpkgs</li>
+<li>GiHub code search (surprisingly helpful)</li>
+<li>Cheatsheet: nixos.wiki/wiki/Cheatsheet</li>
+<li>Slides: github.com/bsima/talks</li>
+
+</ul>
+</section>
+</section>
+</div>
+</div>
+<p> Created by Ben Sima. </p>
+<script src="https://revealjs.com/lib/js/head.min.js"></script>
+<script src="https://revealjs.com/js/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: 'c',
+rollingLinks: false,
+keyboard: true,
+overview: true,
+width: 1200,
+height: 800,
+margin: 0.10,
+minScale: 0.50,
+maxScale: 2.50,
+
+theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+transition: Reveal.getQueryHash().transition || 'slide', // default/cube/page/concave/zoom/linear/fade/none
+transitionSpeed: 'default',
+multiplex: {
+    secret: '', // null if client
+    id: '', // id, obtained from socket.io server
+    url: '' // Location of socket.io server
+},
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'https://revealjs.com/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+});
+</script>
+</body>
+</html>

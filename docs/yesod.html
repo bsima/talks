@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Getting Started with Yesod (in anger)</title>
+<meta name="author" content="(Ben Sima)"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://revealjs.com/css/reveal.css"/>
+
+<link rel="stylesheet" href="https://revealjs.com/css/theme/solarized.css" id="theme"/>
+
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://revealjs.com/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+<meta name="description" content="Getting started with Yesod.">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">Getting Started with Yesod (in anger)</h1><h2 class="author">Ben Sima</h2><h2 class="email"><a href="mailto:ben@bsima.me">ben@bsima.me</a></h2><p class="date">Created: 2018-04-12 Thu 21:24</p>
+</section>
+
+<section>
+<section id="slide-orgd1a5961">
+<h2 id="orgd1a5961">Abstract</h2>
+<p>
+Haskell can be a complex, powerful, highly abstract language. Usually these are
+not features you want in web development, however. That's why popular frameworks
+in languages such as Ruby or Python emphasize, "simple", "easy" and "it just
+works". This talk will share with you a Haskell secret: coding for the web in
+Haskell can be clear, simple, and enjoyable to write, potentially even more so
+than in Ruby/Python. This talk will introduce the Yesod web framework and
+illustrate how Yesod's simple abstractions corral Haskell's complexity into an
+enjoyable and safe value-level language for web programming.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org1a13c2d">
+<h2 id="org1a13c2d">What is Yesod?</h2>
+<ul>
+<li>web framework (MVC)</li>
+<li>set of libraries</li>
+<li>a few "DSL"s</li>
+<li>a typeclass(es)</li>
+
+</ul>
+</section>
+<section id="slide-org061bb9c">
+<h3 id="org061bb9c">Pros and Cons of Yesod</h3>
+<ul>
+<li><code>+</code> Batteries included</li>
+<li><code>+</code> Established tech (SQL, HTML, forms, MVC)</li>
+<li><code>+</code> Fast &amp; reusable widgets</li>
+<li><code>+</code> Type safe routing, form validation, DB queries</li>
+<li><code>+</code> Cross compilation? Mobile/desktop?</li>
+<li><code>±</code> jQuery</li>
+<li><code>±</code> Opinionated</li>
+<li><code>-</code> Non-SPA</li>
+<li><code>-</code> SQL</li>
+
+</ul>
+</section>
+<section id="slide-org9c7354b">
+<h3 id="org9c7354b">Alternatives</h3>
+<ul>
+<li><a href="https://haskell-miso.org/">miso</a> or <a href="https://github.com/reflex-frp/reflex-platform">reflex-dom</a>
+<ul>
+<li>Haskell in the browser, GHCjs</li>
+
+</ul></li>
+<li><a href="http://haskell-servant.readthedocs.io/en/stable/">servant</a>
+<ul>
+<li>type-level routing</li>
+
+</ul></li>
+<li><a href="https://github.com/acid-state/">acid-state</a> (<a href="http://happstack.com/page/view-page-slug/1/happstack">happstack</a>)
+<ul>
+<li>give ACID guarantees to any Haskell datatype</li>
+
+</ul></li>
+<li><a href="http://snapframework.com/">snap</a> / <a href="https://github.com/scotty-web/scotty">scotty</a>
+<ul>
+<li>lightweight "web frameworks"</li>
+
+</ul></li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org821ad8a">
+<h2 id="org821ad8a">Yesod architecture - MVC</h2>
+<pre  class="example">
+src/
+  Handler/Home.hs
+  Helper/Mailchimp.hs
+  Settings.hs
+  Application.hs
+  Foundation.hs
+templates/
+  home.hamlet
+  home.{lucius,cassius}
+  home.julius
+config/
+  models
+  routes
+  settings.yml
+</pre>
+</section>
+</section>
+<section>
+<section id="slide-orgda6cdce">
+<h2 id="orgda6cdce">Model (Persistent)</h2>
+<p>
+Defining an example model
+</p>
+</section>
+<section id="slide-org2c28e72">
+<h4 id="org2c28e72">DSL (config/models)</h4>
+<pre  class="example">
+Entry
+  author UserId
+  content Markdown
+  title Text Maybe
+  pubdate UTCTime
+  deriving Show Eq
+
+User
+  name Text
+</pre>
+</section>
+<section id="slide-org1baa269">
+<h4 id="org1baa269">Generated Haskell</h4>
+<div class="org-src-container">
+
+<pre  class="src src-haskell"><span style="font-weight: bold;">data</span> <span style="font-weight: bold; text-decoration: underline;">Entry</span> <span style="font-weight: bold; font-style: italic;">=</span> <span style="font-weight: bold; text-decoration: underline;">Entry</span>
+  { entryAuthor <span style="font-weight: bold; font-style: italic;">::</span> <span style="font-weight: bold; text-decoration: underline;">UserId</span>
+  , entryContent <span style="font-weight: bold; font-style: italic;">::</span> <span style="font-weight: bold; text-decoration: underline;">Markdown</span>
+  , entryTitle <span style="font-weight: bold; font-style: italic;">::</span> <span style="font-weight: bold; text-decoration: underline;">Maybe</span> <span style="font-weight: bold; text-decoration: underline;">Text</span>
+  , entryPubdate <span style="font-weight: bold; font-style: italic;">::</span> <span style="font-weight: bold; text-decoration: underline;">UTCTime</span>
+  }
+  <span style="font-weight: bold;">deriving</span> (<span style="font-weight: bold; text-decoration: underline;">Show</span>, <span style="font-weight: bold; text-decoration: underline;">Eq</span>, <span style="font-weight: bold; font-style: italic;">...</span>)
+
+<span style="font-weight: bold;">data</span> <span style="font-weight: bold; text-decoration: underline;">User</span> <span style="font-weight: bold; font-style: italic;">=</span> <span style="font-weight: bold; text-decoration: underline;">User</span>
+  { userName <span style="font-weight: bold; font-style: italic;">::</span> <span style="font-weight: bold; text-decoration: underline;">Text</span> }
+</pre>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgfc9fa87">
+<h2 id="orgfc9fa87">Routes</h2>
+<p>
+config/routes:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-haskell"><span style="font-weight: bold; font-style: italic;">/</span>home <span style="font-weight: bold; text-decoration: underline;">HomeR</span> <span style="font-weight: bold; text-decoration: underline;">GET</span>
+<span style="font-weight: bold; font-style: italic;">/</span>entries <span style="font-weight: bold; text-decoration: underline;">EntriesR</span> <span style="font-weight: bold; text-decoration: underline;">GET</span> <span style="font-weight: bold; text-decoration: underline;">POST</span>
+<span style="font-weight: bold; font-style: italic;">/</span>entries<span style="font-weight: bold; font-style: italic;">/#</span><span style="font-weight: bold; text-decoration: underline;">EntryId</span> <span style="font-weight: bold; text-decoration: underline;">EntryR</span> <span style="font-weight: bold; text-decoration: underline;">GET</span> <span style="font-weight: bold; text-decoration: underline;">POST</span> <span style="font-weight: bold; text-decoration: underline;">DELETE</span>
+<span style="font-weight: bold; font-style: italic;">!/</span>entries<span style="font-weight: bold; font-style: italic;">/</span>new <span style="font-weight: bold; text-decoration: underline;">EntryNewR</span> <span style="font-weight: bold; text-decoration: underline;">GET</span> <span style="font-weight: bold; text-decoration: underline;">POST</span>
+</pre>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgab5d000">
+<h2 id="orgab5d000">Controller (Haskell)</h2>
+<div class="org-src-container">
+
+<pre  class="src src-haskell"><span style="font-weight: bold;">getEntryR</span> <span style="font-weight: bold; font-style: italic;">::</span> <span style="font-weight: bold; text-decoration: underline;">EntryId</span> <span style="font-weight: bold; font-style: italic;">-&gt;</span> <span style="font-weight: bold; text-decoration: underline;">Handler</span> <span style="font-weight: bold; text-decoration: underline;">Html</span>
+<span style="font-weight: bold;">getEntryR</span> entryId <span style="font-weight: bold; font-style: italic;">=</span> <span style="font-weight: bold;">do</span>
+  entry <span style="font-weight: bold; font-style: italic;">&lt;-</span> runDB <span style="font-weight: bold; font-style: italic;">$</span> get404 entryId
+  author <span style="font-weight: bold; font-style: italic;">&lt;-</span> runDB <span style="font-weight: bold; font-style: italic;">$</span> get (entryAuthor entry)
+  defaultLayout <span style="font-weight: bold; font-style: italic;">$</span>(widgetFile <span style="font-style: italic;">"entry"</span>)
+</pre>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org85ce165">
+<h2 id="org85ce165">View (Shakespeare)</h2>
+<div class="org-src-container">
+
+<pre  class="src src-html">&lt;<span style="font-weight: bold;">div</span> #entry-#{entryId entry}&gt;
+  $maybe title &lt;- entryTitle entry
+    &lt;<span style="font-weight: bold;">h1</span>&gt;#{title}
+  $nothing
+    &lt;<span style="font-weight: bold;">div</span> .no-title&gt;
+  &lt;<span style="font-weight: bold;">p</span> .by-line&gt;
+    By #{userName author} on #{fmtDate $ entryPubdate entry}
+  &lt;<span style="font-weight: bold;">article</span>&gt;
+    #{markdownToHtml $ entryContent entry}
+</pre>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgeb0fe6b">
+<h2 id="orgeb0fe6b">Forms</h2>
+<aside class="notes">
+<p>
+Forms are the primary boundary between the server and the user. In Yesod, input
+fields are generated and type-checked automatically.
+</p>
+
+</aside>
+</section>
+<section id="slide-org9f8c2b7">
+<h3 id="org9f8c2b7">Displaying a form:</h3>
+<div class="org-src-container">
+
+<pre  class="src src-haskell"><span style="font-weight: bold;">entryForm</span> <span style="font-weight: bold; font-style: italic;">::</span> <span style="font-weight: bold; text-decoration: underline;">AForm</span> <span style="font-weight: bold; text-decoration: underline;">Handler</span> <span style="font-weight: bold; text-decoration: underline;">Entry</span>
+<span style="font-weight: bold;">entryForm</span> <span style="font-weight: bold; font-style: italic;">=</span> <span style="font-weight: bold; text-decoration: underline;">Entry</span>
+  <span style="font-weight: bold; font-style: italic;">&lt;$&gt;</span> areq textField <span style="font-style: italic;">"Title"</span> <span style="font-weight: bold; text-decoration: underline;">Nothing</span>
+  <span style="font-weight: bold; font-style: italic;">&lt;*&gt;</span> areq markdownField <span style="font-style: italic;">"Article"</span> <span style="font-weight: bold; text-decoration: underline;">Nothing</span>
+
+
+<span style="font-weight: bold;">getEntryNewR</span> <span style="font-weight: bold; font-style: italic;">::</span> <span style="font-weight: bold; text-decoration: underline;">Handler</span> <span style="font-weight: bold; text-decoration: underline;">Html</span>
+<span style="font-weight: bold;">getEntryNewR</span> <span style="font-weight: bold; font-style: italic;">=</span> <span style="font-weight: bold;">do</span>
+  (widget, enctype) <span style="font-weight: bold; font-style: italic;">&lt;-</span> generateFormPost entryForm
+  defaultLayout <span style="font-weight: bold; font-style: italic;">$</span>(widgetFile <span style="font-style: italic;">"entry-new"</span>)
+</pre>
+</div>
+</section>
+<section id="slide-orgf7b7071">
+<h3 id="orgf7b7071">Posting a form:</h3>
+<div class="org-src-container">
+
+<pre  class="src src-haskell"><span style="font-weight: bold;">entryForm</span> <span style="font-weight: bold; font-style: italic;">::</span> <span style="font-weight: bold; text-decoration: underline;">AForm</span> <span style="font-weight: bold; text-decoration: underline;">Handler</span> <span style="font-weight: bold; text-decoration: underline;">Entry</span>
+<span style="font-weight: bold;">entryForm</span> <span style="font-weight: bold; font-style: italic;">=</span> <span style="font-weight: bold; text-decoration: underline;">Entry</span>
+  <span style="font-weight: bold; font-style: italic;">&lt;$&gt;</span> areq textField <span style="font-style: italic;">"Title"</span> <span style="font-weight: bold; text-decoration: underline;">Nothing</span>
+  <span style="font-weight: bold; font-style: italic;">&lt;*&gt;</span> areq markdownField <span style="font-style: italic;">"Article"</span> <span style="font-weight: bold; text-decoration: underline;">Nothing</span>
+
+
+<span style="font-weight: bold;">postEntryNewR</span> <span style="font-weight: bold; font-style: italic;">::</span> <span style="font-weight: bold; text-decoration: underline;">Handler</span> <span style="font-weight: bold; text-decoration: underline;">Html</span>
+<span style="font-weight: bold;">postEntryNewR</span> <span style="font-weight: bold; font-style: italic;">=</span> <span style="font-weight: bold;">do</span>
+  ((res, widget), enctype) <span style="font-weight: bold; font-style: italic;">&lt;-</span> runFormPost entryForm
+  (userId, user) <span style="font-weight: bold; font-style: italic;">&lt;-</span> requireAuthPair
+  <span style="font-weight: bold;">case</span> res <span style="font-weight: bold;">of</span>
+    <span style="font-weight: bold; text-decoration: underline;">FormSuccess</span> entry <span style="font-weight: bold; font-style: italic;">-&gt;</span> <span style="font-weight: bold;">do</span>
+      entryId <span style="font-weight: bold; font-style: italic;">&lt;-</span> runDB <span style="font-weight: bold; font-style: italic;">$</span> insert <span style="font-weight: bold; font-style: italic;">$</span> entry {entryAuthor <span style="font-weight: bold; font-style: italic;">=</span> userId}
+      redirect <span style="font-weight: bold; font-style: italic;">$</span> <span style="font-weight: bold; text-decoration: underline;">EntryR</span> entryId
+    <span style="font-weight: bold;">_</span> <span style="font-weight: bold; font-style: italic;">-&gt;</span> defaultLayout <span style="font-weight: bold; font-style: italic;">$</span>(widgetFile <span style="font-style: italic;">"entry-new"</span>)
+</pre>
+</div>
+</section>
+<section id="slide-orgf5d60dc">
+<h3 id="orgf5d60dc">The end result</h3>
+<p>
+entry-new.hamlet
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-haskell"><span style="font-weight: bold; font-style: italic;">&lt;</span>form <span style="font-weight: bold; font-style: italic;">#</span>new<span style="font-weight: bold; font-style: italic;">-</span>entry<span style="font-weight: bold; font-style: italic;">-</span>form <span style="font-weight: bold; font-style: italic;">.</span>form<span style="font-weight: bold; font-style: italic;">-</span>control method<span style="font-weight: bold; font-style: italic;">=</span>post
+      action<span style="font-weight: bold; font-style: italic;">=@</span>{<span style="font-weight: bold; text-decoration: underline;">EntryNewR</span>} enctype<span style="font-weight: bold; font-style: italic;">=#</span>{enctype}<span style="font-weight: bold; font-style: italic;">&gt;</span>
+  <span style="font-weight: bold; font-style: italic;">^</span>{widget}
+  <span style="font-weight: bold; font-style: italic;">&lt;</span>button <span style="font-weight: bold; font-style: italic;">.</span>btn<span style="font-weight: bold; font-style: italic;">.</span>btn<span style="font-weight: bold; font-style: italic;">-</span><span style="font-weight: bold;">default</span><span style="font-weight: bold; font-style: italic;">&gt;</span><span style="font-weight: bold; text-decoration: underline;">Submit</span><span style="font-weight: bold; font-style: italic;">!</span>
+</pre>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org671f9d2">
+<h2 id="org671f9d2">Widgets</h2>
+<p>
+Reusable combinations of:
+</p>
+
+<ul>
+<li>HTML</li>
+<li>CSS</li>
+<li>JavaScript</li>
+<li>Haskell</li>
+
+</ul>
+</section>
+<section id="slide-org4cae79e">
+<h3 id="org4cae79e">Haskell</h3>
+<div class="org-src-container">
+
+<pre  class="src src-haskell"><span style="font-weight: bold;">addToLibrary</span> <span style="font-weight: bold; font-style: italic;">::</span> <span style="font-weight: bold; text-decoration: underline;">UserId</span> <span style="font-weight: bold; font-style: italic;">-&gt;</span> <span style="font-weight: bold; text-decoration: underline;">RefId</span> <span style="font-weight: bold; font-style: italic;">-&gt;</span> <span style="font-weight: bold; text-decoration: underline;">Widget</span>
+<span style="font-weight: bold;">addToLibrary</span> uid refId <span style="font-weight: bold; font-style: italic;">=</span> <span style="font-weight: bold;">do</span>
+  libFormId <span style="font-weight: bold; font-style: italic;">&lt;-</span> newIdent
+  mlib <span style="font-weight: bold; font-style: italic;">&lt;-</span> handlerToWidget <span style="font-weight: bold; font-style: italic;">$</span> runDB <span style="font-weight: bold; font-style: italic;">$</span> getBy <span style="font-weight: bold; font-style: italic;">$</span> <span style="font-weight: bold; text-decoration: underline;">UniqEntry</span> uid refId
+  <span style="font-weight: bold;">let</span> (icon, txt) <span style="font-weight: bold; font-style: italic;">=</span> <span style="font-weight: bold;">case</span> mlib <span style="font-weight: bold;">of</span>
+        <span style="font-weight: bold; text-decoration: underline;">Nothing</span> <span style="font-weight: bold; font-style: italic;">-&gt;</span> (<span style="font-style: italic;">"oi-plus"</span>, <span style="font-style: italic;">"Add to your library"</span>) <span style="font-weight: bold; font-style: italic;">::</span> (<span style="font-weight: bold; text-decoration: underline;">Text</span>, <span style="font-weight: bold; text-decoration: underline;">Text</span>)
+        <span style="font-weight: bold; text-decoration: underline;">Just</span> <span style="font-weight: bold;">_</span> <span style="font-weight: bold; font-style: italic;">-&gt;</span> (<span style="font-style: italic;">"oi-check"</span>, <span style="font-style: italic;">"In your library"</span>) <span style="font-weight: bold; font-style: italic;">::</span> (<span style="font-weight: bold; text-decoration: underline;">Text</span>, <span style="font-weight: bold; text-decoration: underline;">Text</span>)
+  toWidget [julius<span style="font-style: italic;">|</span>
+<span style="font-style: italic;">&lt;JS from next slide&gt;</span>
+<span style="font-style: italic;">|</span>]
+  toWidget [whamlet|
+<span style="color: #000000; background-color: #ffffff;">&lt;</span><span style="font-weight: bold;">form</span><span style="color: #000000; background-color: #ffffff;"> </span><span style="font-weight: bold; font-style: italic;">.form-horizontal</span><span style="color: #000000; background-color: #ffffff;"> #</span><span style="font-weight: bold;">#{libFormId}</span><span style="color: #000000; background-color: #ffffff;">&gt;</span>
+<span style="color: #000000; background-color: #ffffff;">  &lt;</span><span style="font-weight: bold;">button</span><span style="color: #000000; background-color: #ffffff;"> </span><span style="font-weight: bold; font-style: italic;">.card-text.btn.btn-success.clickable.align-middle</span><span style="color: #000000; background-color: #ffffff;"> </span><span style="font-weight: bold; font-style: italic;">type</span><span style="color: #000000; background-color: #ffffff;">=</span><span style="font-style: italic;">submit&gt;</span>
+<span style="color: #000000; background-color: #ffffff;">    &lt;</span><span style="font-weight: bold;">i</span><span style="color: #000000; background-color: #ffffff;"> </span><span style="font-weight: bold; font-style: italic;">.oi.</span><span style="font-weight: bold;">#{icon}</span><span style="color: #000000; background-color: #ffffff;">.align-middle </span><span style="font-weight: bold; font-style: italic;">aria-hidden</span><span style="color: #000000; background-color: #ffffff;">=</span><span style="font-style: italic;">"true"</span><span style="color: #000000; background-color: #ffffff;">&gt;</span>
+<span style="color: #000000; background-color: #ffffff;">    &lt;</span><span style="font-weight: bold;">span</span><span style="color: #000000; background-color: #ffffff;"> </span><span style="font-weight: bold; font-style: italic;">.align-middle</span><span style="color: #000000; background-color: #ffffff;">&gt;</span>
+<span style="color: #000000; background-color: #ffffff;">      </span><span style="font-weight: bold;">#{txt}</span>
+<span style="color: #000000; background-color: #ffffff;">|</span>]
+</pre>
+</div>
+</section>
+<section id="slide-org34c887d">
+<h3 id="org34c887d">Type safe JS (kinda)</h3>
+<div class="org-src-container">
+
+<pre  class="src src-javascript">$(<span style="font-style: italic;">"##{rawJS libFormId}"</span>).submit(<span style="font-weight: bold;">function</span>(<span style="font-weight: bold; font-style: italic;">event</span>){
+  event.preventDefault();
+  $.ajax({
+    url: <span style="font-style: italic;">'@{LibraryR}'</span>,
+    type: <span style="font-style: italic;">'POST'</span>,
+    contentType: <span style="font-style: italic;">"application/json"</span>,
+    data: JSON.stringify({refId: #{toJSON $ fromSqlKey refId}}),
+    <span style="font-weight: bold;">success</span>: <span style="font-weight: bold;">function</span> (<span style="font-weight: bold; font-style: italic;">data</span>) {
+      $(<span style="font-style: italic;">"##{rawJS libFormId} &gt; button &gt; i"</span>).removeClass(<span style="font-style: italic;">"oi-plus"</span>);
+      $(<span style="font-style: italic;">"##{rawJS libFormId} &gt; button &gt; i"</span>).addClass(<span style="font-style: italic;">"oi-check"</span>);
+      $(<span style="font-style: italic;">"##{rawJS libFormId} &gt; button &gt; span"</span>).text(<span style="font-style: italic;">"In your library"</span>);
+    },
+    <span style="font-weight: bold;">error</span>: <span style="font-weight: bold;">function</span> (<span style="font-weight: bold; font-style: italic;">data</span>) {
+      console.warn(<span style="font-style: italic;">"Error: "</span> + data);
+    },
+  });
+});
+</pre>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org85cd822">
+<h2 id="org85cd822">Content Negotiation - TypedContent</h2>
+<div class="org-src-container">
+
+<pre  class="src src-haskell"><span style="font-weight: bold;">getEntryR</span> <span style="font-weight: bold; font-style: italic;">::</span> <span style="font-weight: bold; text-decoration: underline;">EntryId</span> <span style="font-weight: bold; font-style: italic;">-&gt;</span> <span style="font-weight: bold; text-decoration: underline;">Handler</span> <span style="font-weight: bold; text-decoration: underline;">TypedContent</span>
+<span style="font-weight: bold;">getEntryR</span> entryId <span style="font-weight: bold; font-style: italic;">=</span> <span style="font-weight: bold;">do</span>
+  entry <span style="font-weight: bold; font-style: italic;">&lt;-</span> runDB <span style="font-weight: bold; font-style: italic;">$</span> get404 entryId
+  selectRep <span style="font-weight: bold; font-style: italic;">$</span> <span style="font-weight: bold;">do</span>
+    provideRep <span style="font-weight: bold; font-style: italic;">$</span> defaultLayout <span style="font-weight: bold; font-style: italic;">$</span> [whamlet|<span style="font-weight: bold;">#{entry}</span><span style="color: #000000; background-color: #ffffff;">|</span>]
+    provideJson entry
+    provideRepType <span style="font-style: italic;">"text/csv"</span> <span style="font-weight: bold; font-style: italic;">$</span> Csv.encode entry
+</pre>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org3d9a085">
+<h2 id="org3d9a085">The Yesod Typeclass</h2>
+<p>
+<a href="https://www.stackage.org/haddock/nightly-2018-04-03/yesod-core-1.6.2/Yesod-Core.html">https://www.stackage.org/haddock/nightly-2018-04-03/yesod-core-1.6.2/Yesod-Core.html</a>
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org46e113c">
+<h2 id="org46e113c">Yesod Auth</h2>
+<p>
+Yesod ships with authentication:
+</p>
+<ul>
+<li>OpenID</li>
+<li>OAuth</li>
+<li>Email/Password</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgd899ff3">
+<h2 id="orgd899ff3">Help - Where do I go when I get stuck?</h2>
+<ul>
+<li>IRC on Freenode (I'm <code>bsima</code>)
+<ul>
+<li><code>#yesod</code></li>
+<li><code>#haskell-beginners</code></li>
+<li><code>#haskell</code></li>
+
+</ul></li>
+<li>Yesod book: <a href="https://yesodweb.com/book">yesodweb.com/book</a></li>
+<li>Haskell-cafe / Haskell-beginners mailing lists</li>
+<li>Slides: <a href="https://github.com/bsima/talks">github.com/bsima/talks</a></li>
+
+</ul>
+</section>
+</section>
+</div>
+</div>
+<p> Created by Ben Sima. </p>
+<script src="https://revealjs.com/lib/js/head.min.js"></script>
+<script src="https://revealjs.com/js/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: 'c',
+rollingLinks: false,
+keyboard: true,
+overview: true,
+width: 1200,
+height: 800,
+margin: 0.10,
+minScale: 0.50,
+maxScale: 2.50,
+
+theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+transition: Reveal.getQueryHash().transition || 'slide', // default/cube/page/concave/zoom/linear/fade/none
+transitionSpeed: 'default',
+multiplex: {
+    secret: '', // null if client
+    id: '', // id, obtained from socket.io server
+    url: '' // Location of socket.io server
+},
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'https://revealjs.com/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+});
+</script>
+</body>
+</html>
