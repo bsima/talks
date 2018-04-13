@@ -1,6 +1,6 @@
 [submodule "revealjs"]
 	path = revealjs
-	url = git@github.com:hakimel/reveal.js.git
+	url = https://github.com/hakimel/reveal.js.git
 [submodule "org-reveal"]
 	path = org-reveal
-	url = git@github.com:yjwen/org-reveal.git
+	url = https://github.com/yjwen/org-reveal.git
