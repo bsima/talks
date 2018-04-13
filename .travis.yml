@@ -1,0 +1,16 @@
+before_install: make clean
+
+install:
+  - git submodule init
+  - git submodule update
+
+script: make
+
+deploy:
+  local-dir: public
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  keep-history: true
+  on:
+    branch: master
