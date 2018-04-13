@@ -8,9 +8,9 @@
 <style type="text/css">
 .underline { text-decoration: underline; }
 </style>
-<link rel="stylesheet" href="https://bsima.github.io/talks/css/reveal.css"/>
+<link rel="stylesheet" href="https://bsima.github.io/talks/revealjs/css/reveal.css"/>
 
-<link rel="stylesheet" href="https://bsima.github.io/talks/css/theme/solarized.css" id="theme"/>
+<link rel="stylesheet" href="https://bsima.github.io/talks/revealjs/css/theme/solarized.css" id="theme"/>
 
 
 <!-- If the query includes 'print-pdf', include the PDF print sheet -->
@@ -19,7 +19,7 @@
         var link = document.createElement( 'link' );
         link.rel = 'stylesheet';
         link.type = 'text/css';
-        link.href = 'https://bsima.github.io/talks/css/print/pdf.css';
+        link.href = 'https://bsima.github.io/talks/revealjs/css/print/pdf.css';
         document.getElementsByTagName( 'head' )[0].appendChild( link );
     }
 </script>
@@ -28,7 +28,7 @@
 <body>
 <div class="reveal">
 <div class="slides">
-<section id="sec-title-slide"><h1 class="title">Intro to Easy Deployments with NixOps</h1><h2 class="author">Ben Sima</h2><h2 class="email"><a href="mailto:ben@bsima.me">ben@bsima.me</a></h2><p class="date">Created: 2018-04-12 Thu 22:19</p>
+<section id="sec-title-slide"><h1 class="title">Intro to Easy Deployments with NixOps</h1><h2 class="author">Ben Sima</h2><h2 class="email"><a href="mailto:ben@bsima.me">ben@bsima.me</a></h2><p class="date">Created: 2018-04-12 Thu 22:27</p>
 </section>
 
 <section>
@@ -139,8 +139,8 @@ stdenv.mkDerivation {
 </section>
 </section>
 <section>
-<section id="slide-org3a61262">
-<h2 id="org3a61262">Nix derivation</h2>
+<section id="slide-orgf6e066f">
+<h2 id="orgf6e066f">Nix derivation</h2>
 <pre class="example">
 $ echo mycontent &gt; myfile
 
@@ -163,8 +163,8 @@ expression -&gt; derivation -&gt; build product
 </section>
 </section>
 <section>
-<section id="slide-orgf6e066f">
-<h2 id="orgf6e066f">Nix derivation</h2>
+<section id="slide-orgb33ac4d">
+<h2 id="orgb33ac4d">Nix derivation</h2>
 <pre class="example">
 $ cat /nix/store/y4h73bmrc9ii5bxg6i7ck6hsf5gqv8ck-foo.drv
 Derive(
@@ -397,8 +397,8 @@ buildImage {
 </div>
 </div>
 <p> Created by Ben Sima. </p>
-<script src="https://bsima.github.io/talks/lib/js/head.min.js"></script>
-<script src="https://bsima.github.io/talks/js/reveal.js"></script>
+<script src="https://bsima.github.io/talks/revealjs/lib/js/head.min.js"></script>
+<script src="https://bsima.github.io/talks/revealjs/js/reveal.js"></script>
 
 <script>
 // Full list of configuration options available here:
@@ -430,7 +430,7 @@ multiplex: {
 
 // Optional libraries used to extend on reveal.js
 dependencies: [
- { src: 'https://bsima.github.io/talks/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+ { src: 'https://bsima.github.io/talks/revealjs/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
 });
 </script>
 </body>
