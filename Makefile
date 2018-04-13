@@ -1,5 +1,5 @@
 .PHONY: all
-all: docs/js/reveal.js docs/lib/js/head.min.js docs/css/reveal.css docs/css/theme/solarized.css
+all: docs/js/reveal.js docs/lib/js/head.min.js docs/css/reveal.css docs/css/theme/solarized.css docs/plugin/notes/notes.js docs/plugin/notes/notes.html
 	emacs --batch -l config.el -f org-publish-all
 	rm -f docs/*~
 
@@ -24,3 +24,11 @@ docs/css/reveal.css: revealjs/css/reveal.css
 docs/css/theme/solarized.css: revealjs/css/theme/solarized.css
 	mkdir -p docs/css/theme
 	cp revealjs/css/theme/solarized.css docs/css/theme/solarized.css
+
+docs/plugin/notes/notes.js: revealjs/plugin/notes/notes.js
+	mkdir -p docs/plugin/notes
+	cp revealjs/plugin/notes/notes.js docs/plugin/notes/notes.js
+
+docs/plugin/notes/notes.html: revealjs/plugin/notes/notes.html
+	mkdir -p docs/plugin/notes
+	cp revealjs/plugin/notes/notes.html docs/plugin/notes/notes.html
