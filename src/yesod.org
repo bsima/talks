@@ -16,7 +16,7 @@
 #+REVEAL_HEAD_PREAMBLE: <meta name="description" content="Getting started with Yesod.">
 #+REVEAL_POSTAMBLE: <p> Created by Ben Sima. </p>
 #+REVEAL_PLUGINS: (notes)
-#+REVEAL_ROOT: https://bsima.github.io/talks/
+#+REVEAL_ROOT: https://bsima.github.io/talks/revealjs
 
 * Abstract
 Haskell can be a complex, powerful, highly abstract language. Usually these are
