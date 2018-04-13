@@ -1,5 +1,5 @@
 .PHONY: all
-all: docs/reveal.min.js docs/reveal.min.css
+all: docs/js/reveal.js docs/lib/js/head.min.js docs/css/reveal.css docs/css/theme/solarized.css
 	emacs --batch -l config.el -f org-publish-all
 	rm -f docs/*~
 
@@ -9,14 +9,18 @@ clean:
 
 ### RevealJS
 
-docs/reveal.min.js: revealjs/js/reveal.min.js
-	cp revealjs/js/reveal.min.js docs/reveal.min.js
+docs/js/reveal.js: revealjs/js/reveal.js
+	mkdir -p docs/js
+	cp revealjs/js/reveal.js docs/js/reveal.js
 
-revealjs/js/reveal.min.js:
-	cd revealjs && grunt js
+docs/lib/js/head.min.js: revealjs/lib/js/head.min.js
+	mkdir -p docs/lib/js
+	cp revealjs/lib/js/head.min.js docs/lib/js/head.min.js
 
-docs/reveal.min.css: revealjs/css/reveal.min.css
-	cp revealjs/css/reveal.min.css docs/reveal.min.css
+docs/css/reveal.css: revealjs/css/reveal.css
+	mkdir -p docs/css
+	cp revealjs/css/reveal.css docs/css/reveal.css
 
-revealjs/css/reveal.min.css:
-	cd revealjs && grunt css
+docs/css/theme/solarized.css: revealjs/css/theme/solarized.css
+	mkdir -p docs/css/theme
+	cp revealjs/css/theme/solarized.css docs/css/theme/solarized.css
