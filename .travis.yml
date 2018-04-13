@@ -1,4 +1,8 @@
-before_install: make clean
+language: nix
+
+before_install:
+  - make clean
+  - nix-shell
 
 install:
   - git submodule init
