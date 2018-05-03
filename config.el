@@ -17,3 +17,7 @@
     :publishing-function org-reveal-publish-to-reveal
     :headline-levels 4
     :auto-preamble t)))
+
+(defun bs/publish-talks ()
+  (interactive)
+  (org-publish "talks" t))
