@@ -27,7 +27,7 @@
 <body>
 <div class="reveal">
 <div class="slides">
-<section id="sec-title-slide"><h1 class="title">Getting Started with Yesod (in anger)</h1><h2 class="author">Ben Sima</h2><h2 class="email"><a href="mailto:ben@bsima.me">ben@bsima.me</a></h2><p class="date">Created: 2018-04-12 Thu 22:27</p>
+<section id="sec-title-slide"><h1 class="title">Getting Started with Yesod (in anger)</h1><h2 class="author">Ben Sima</h2><h2 class="email"><a href="mailto:ben@bsima.me">ben@bsima.me</a></h2><p class="date">Created: 2018-05-03 Thu 18:27</p>
 </section>
 
 <section>
@@ -144,16 +144,16 @@ User
 <h4 id="org1baa269">Generated Haskell</h4>
 <div class="org-src-container">
 
-<pre  class="src src-haskell"><span style="font-weight: bold;">data</span> <span style="font-weight: bold; text-decoration: underline;">Entry</span> <span style="font-weight: bold; font-style: italic;">=</span> <span style="font-weight: bold; text-decoration: underline;">Entry</span>
-  { entryAuthor <span style="font-weight: bold; font-style: italic;">::</span> <span style="font-weight: bold; text-decoration: underline;">UserId</span>
-  , entryContent <span style="font-weight: bold; font-style: italic;">::</span> <span style="font-weight: bold; text-decoration: underline;">Markdown</span>
-  , entryTitle <span style="font-weight: bold; font-style: italic;">::</span> <span style="font-weight: bold; text-decoration: underline;">Maybe</span> <span style="font-weight: bold; text-decoration: underline;">Text</span>
-  , entryPubdate <span style="font-weight: bold; font-style: italic;">::</span> <span style="font-weight: bold; text-decoration: underline;">UTCTime</span>
+<pre  class="src src-haskell"><span style="color: #859900; font-weight: bold;">data</span> <span style="color: #b58900;">Entry</span> <span style="color: #268bd2;">=</span> <span style="color: #b58900;">Entry</span>
+  { entryAuthor <span style="color: #268bd2;">::</span> <span style="color: #b58900;">UserId</span>
+  , entryContent <span style="color: #268bd2;">::</span> <span style="color: #b58900;">Markdown</span>
+  , entryTitle <span style="color: #268bd2;">::</span> <span style="color: #b58900;">Maybe</span> <span style="color: #b58900;">Text</span>
+  , entryPubdate <span style="color: #268bd2;">::</span> <span style="color: #b58900;">UTCTime</span>
   }
-  <span style="font-weight: bold;">deriving</span> (<span style="font-weight: bold; text-decoration: underline;">Show</span>, <span style="font-weight: bold; text-decoration: underline;">Eq</span>, <span style="font-weight: bold; font-style: italic;">...</span>)
+  <span style="color: #859900; font-weight: bold;">deriving</span> (<span style="color: #b58900;">Show</span>, <span style="color: #b58900;">Eq</span>, <span style="color: #268bd2;">...</span>)
 
-<span style="font-weight: bold;">data</span> <span style="font-weight: bold; text-decoration: underline;">User</span> <span style="font-weight: bold; font-style: italic;">=</span> <span style="font-weight: bold; text-decoration: underline;">User</span>
-  { userName <span style="font-weight: bold; font-style: italic;">::</span> <span style="font-weight: bold; text-decoration: underline;">Text</span> }
+<span style="color: #859900; font-weight: bold;">data</span> <span style="color: #b58900;">User</span> <span style="color: #268bd2;">=</span> <span style="color: #b58900;">User</span>
+  { userName <span style="color: #268bd2;">::</span> <span style="color: #b58900;">Text</span> }
 </pre>
 </div>
 </section>
@@ -166,10 +166,10 @@ config/routes:
 </p>
 <div class="org-src-container">
 
-<pre  class="src src-haskell"><span style="font-weight: bold; font-style: italic;">/</span>home <span style="font-weight: bold; text-decoration: underline;">HomeR</span> <span style="font-weight: bold; text-decoration: underline;">GET</span>
-<span style="font-weight: bold; font-style: italic;">/</span>entries <span style="font-weight: bold; text-decoration: underline;">EntriesR</span> <span style="font-weight: bold; text-decoration: underline;">GET</span> <span style="font-weight: bold; text-decoration: underline;">POST</span>
-<span style="font-weight: bold; font-style: italic;">/</span>entries<span style="font-weight: bold; font-style: italic;">/#</span><span style="font-weight: bold; text-decoration: underline;">EntryId</span> <span style="font-weight: bold; text-decoration: underline;">EntryR</span> <span style="font-weight: bold; text-decoration: underline;">GET</span> <span style="font-weight: bold; text-decoration: underline;">POST</span> <span style="font-weight: bold; text-decoration: underline;">DELETE</span>
-<span style="font-weight: bold; font-style: italic;">!/</span>entries<span style="font-weight: bold; font-style: italic;">/</span>new <span style="font-weight: bold; text-decoration: underline;">EntryNewR</span> <span style="font-weight: bold; text-decoration: underline;">GET</span> <span style="font-weight: bold; text-decoration: underline;">POST</span>
+<pre  class="src src-haskell"><span style="color: #268bd2;">/</span>home <span style="color: #b58900;">HomeR</span> <span style="color: #b58900;">GET</span>
+<span style="color: #268bd2;">/</span>entries <span style="color: #b58900;">EntriesR</span> <span style="color: #b58900;">GET</span> <span style="color: #b58900;">POST</span>
+<span style="color: #268bd2;">/</span>entries<span style="color: #268bd2;">/#</span><span style="color: #b58900;">EntryId</span> <span style="color: #b58900;">EntryR</span> <span style="color: #b58900;">GET</span> <span style="color: #b58900;">POST</span> <span style="color: #b58900;">DELETE</span>
+<span style="color: #268bd2;">!/</span>entries<span style="color: #268bd2;">/</span>new <span style="color: #b58900;">EntryNewR</span> <span style="color: #b58900;">GET</span> <span style="color: #b58900;">POST</span>
 </pre>
 </div>
 </section>
@@ -179,11 +179,11 @@ config/routes:
 <h2 id="orgab5d000">Controller (Haskell)</h2>
 <div class="org-src-container">
 
-<pre  class="src src-haskell"><span style="font-weight: bold;">getEntryR</span> <span style="font-weight: bold; font-style: italic;">::</span> <span style="font-weight: bold; text-decoration: underline;">EntryId</span> <span style="font-weight: bold; font-style: italic;">-&gt;</span> <span style="font-weight: bold; text-decoration: underline;">Handler</span> <span style="font-weight: bold; text-decoration: underline;">Html</span>
-<span style="font-weight: bold;">getEntryR</span> entryId <span style="font-weight: bold; font-style: italic;">=</span> <span style="font-weight: bold;">do</span>
-  entry <span style="font-weight: bold; font-style: italic;">&lt;-</span> runDB <span style="font-weight: bold; font-style: italic;">$</span> get404 entryId
-  author <span style="font-weight: bold; font-style: italic;">&lt;-</span> runDB <span style="font-weight: bold; font-style: italic;">$</span> get (entryAuthor entry)
-  defaultLayout <span style="font-weight: bold; font-style: italic;">$</span>(widgetFile <span style="font-style: italic;">"entry"</span>)
+<pre  class="src src-haskell"><span style="color: #268bd2;">getEntryR</span> <span style="color: #268bd2;">::</span> <span style="color: #b58900;">EntryId</span> <span style="color: #268bd2;">-&gt;</span> <span style="color: #b58900;">Handler</span> <span style="color: #b58900;">Html</span>
+<span style="color: #268bd2;">getEntryR</span> entryId <span style="color: #268bd2;">=</span> <span style="color: #859900; font-weight: bold;">do</span>
+  entry <span style="color: #268bd2;">&lt;-</span> runDB <span style="color: #268bd2;">$</span> get404 entryId
+  author <span style="color: #268bd2;">&lt;-</span> runDB <span style="color: #268bd2;">$</span> get (entryAuthor entry)
+  defaultLayout <span style="color: #268bd2;">$</span>(widgetFile <span style="color: #2aa198;">"entry"</span>)
 </pre>
 </div>
 </section>
@@ -193,14 +193,14 @@ config/routes:
 <h2 id="org85ce165">View (Shakespeare)</h2>
 <div class="org-src-container">
 
-<pre  class="src src-html">&lt;<span style="font-weight: bold;">div</span> #entry-#{entryId entry}&gt;
+<pre  class="src src-html">&lt;<span style="color: #268bd2;">div</span> #entry-#{entryId entry}&gt;
   $maybe title &lt;- entryTitle entry
-    &lt;<span style="font-weight: bold;">h1</span>&gt;#{title}
+    &lt;<span style="color: #268bd2;">h1</span>&gt;#{title}
   $nothing
-    &lt;<span style="font-weight: bold;">div</span> .no-title&gt;
-  &lt;<span style="font-weight: bold;">p</span> .by-line&gt;
+    &lt;<span style="color: #268bd2;">div</span> .no-title&gt;
+  &lt;<span style="color: #268bd2;">p</span> .by-line&gt;
     By #{userName author} on #{fmtDate $ entryPubdate entry}
-  &lt;<span style="font-weight: bold;">article</span>&gt;
+  &lt;<span style="color: #268bd2;">article</span>&gt;
     #{markdownToHtml $ entryContent entry}
 </pre>
 </div>
@@ -221,16 +221,16 @@ fields are generated and type-checked automatically.
 <h3 id="org9f8c2b7">Displaying a form:</h3>
 <div class="org-src-container">
 
-<pre  class="src src-haskell"><span style="font-weight: bold;">entryForm</span> <span style="font-weight: bold; font-style: italic;">::</span> <span style="font-weight: bold; text-decoration: underline;">AForm</span> <span style="font-weight: bold; text-decoration: underline;">Handler</span> <span style="font-weight: bold; text-decoration: underline;">Entry</span>
-<span style="font-weight: bold;">entryForm</span> <span style="font-weight: bold; font-style: italic;">=</span> <span style="font-weight: bold; text-decoration: underline;">Entry</span>
-  <span style="font-weight: bold; font-style: italic;">&lt;$&gt;</span> areq textField <span style="font-style: italic;">"Title"</span> <span style="font-weight: bold; text-decoration: underline;">Nothing</span>
-  <span style="font-weight: bold; font-style: italic;">&lt;*&gt;</span> areq markdownField <span style="font-style: italic;">"Article"</span> <span style="font-weight: bold; text-decoration: underline;">Nothing</span>
+<pre  class="src src-haskell"><span style="color: #268bd2;">entryForm</span> <span style="color: #268bd2;">::</span> <span style="color: #b58900;">AForm</span> <span style="color: #b58900;">Handler</span> <span style="color: #b58900;">Entry</span>
+<span style="color: #268bd2;">entryForm</span> <span style="color: #268bd2;">=</span> <span style="color: #b58900;">Entry</span>
+  <span style="color: #268bd2;">&lt;$&gt;</span> areq textField <span style="color: #2aa198;">"Title"</span> <span style="color: #b58900;">Nothing</span>
+  <span style="color: #268bd2;">&lt;*&gt;</span> areq markdownField <span style="color: #2aa198;">"Article"</span> <span style="color: #b58900;">Nothing</span>
 
 
-<span style="font-weight: bold;">getEntryNewR</span> <span style="font-weight: bold; font-style: italic;">::</span> <span style="font-weight: bold; text-decoration: underline;">Handler</span> <span style="font-weight: bold; text-decoration: underline;">Html</span>
-<span style="font-weight: bold;">getEntryNewR</span> <span style="font-weight: bold; font-style: italic;">=</span> <span style="font-weight: bold;">do</span>
-  (widget, enctype) <span style="font-weight: bold; font-style: italic;">&lt;-</span> generateFormPost entryForm
-  defaultLayout <span style="font-weight: bold; font-style: italic;">$</span>(widgetFile <span style="font-style: italic;">"entry-new"</span>)
+<span style="color: #268bd2;">getEntryNewR</span> <span style="color: #268bd2;">::</span> <span style="color: #b58900;">Handler</span> <span style="color: #b58900;">Html</span>
+<span style="color: #268bd2;">getEntryNewR</span> <span style="color: #268bd2;">=</span> <span style="color: #859900; font-weight: bold;">do</span>
+  (widget, enctype) <span style="color: #268bd2;">&lt;-</span> generateFormPost entryForm
+  defaultLayout <span style="color: #268bd2;">$</span>(widgetFile <span style="color: #2aa198;">"entry-new"</span>)
 </pre>
 </div>
 </section>
@@ -238,21 +238,21 @@ fields are generated and type-checked automatically.
 <h3 id="orgf7b7071">Posting a form:</h3>
 <div class="org-src-container">
 
-<pre  class="src src-haskell"><span style="font-weight: bold;">entryForm</span> <span style="font-weight: bold; font-style: italic;">::</span> <span style="font-weight: bold; text-decoration: underline;">AForm</span> <span style="font-weight: bold; text-decoration: underline;">Handler</span> <span style="font-weight: bold; text-decoration: underline;">Entry</span>
-<span style="font-weight: bold;">entryForm</span> <span style="font-weight: bold; font-style: italic;">=</span> <span style="font-weight: bold; text-decoration: underline;">Entry</span>
-  <span style="font-weight: bold; font-style: italic;">&lt;$&gt;</span> areq textField <span style="font-style: italic;">"Title"</span> <span style="font-weight: bold; text-decoration: underline;">Nothing</span>
-  <span style="font-weight: bold; font-style: italic;">&lt;*&gt;</span> areq markdownField <span style="font-style: italic;">"Article"</span> <span style="font-weight: bold; text-decoration: underline;">Nothing</span>
+<pre  class="src src-haskell"><span style="color: #268bd2;">entryForm</span> <span style="color: #268bd2;">::</span> <span style="color: #b58900;">AForm</span> <span style="color: #b58900;">Handler</span> <span style="color: #b58900;">Entry</span>
+<span style="color: #268bd2;">entryForm</span> <span style="color: #268bd2;">=</span> <span style="color: #b58900;">Entry</span>
+  <span style="color: #268bd2;">&lt;$&gt;</span> areq textField <span style="color: #2aa198;">"Title"</span> <span style="color: #b58900;">Nothing</span>
+  <span style="color: #268bd2;">&lt;*&gt;</span> areq markdownField <span style="color: #2aa198;">"Article"</span> <span style="color: #b58900;">Nothing</span>
 
 
-<span style="font-weight: bold;">postEntryNewR</span> <span style="font-weight: bold; font-style: italic;">::</span> <span style="font-weight: bold; text-decoration: underline;">Handler</span> <span style="font-weight: bold; text-decoration: underline;">Html</span>
-<span style="font-weight: bold;">postEntryNewR</span> <span style="font-weight: bold; font-style: italic;">=</span> <span style="font-weight: bold;">do</span>
-  ((res, widget), enctype) <span style="font-weight: bold; font-style: italic;">&lt;-</span> runFormPost entryForm
-  (userId, user) <span style="font-weight: bold; font-style: italic;">&lt;-</span> requireAuthPair
-  <span style="font-weight: bold;">case</span> res <span style="font-weight: bold;">of</span>
-    <span style="font-weight: bold; text-decoration: underline;">FormSuccess</span> entry <span style="font-weight: bold; font-style: italic;">-&gt;</span> <span style="font-weight: bold;">do</span>
-      entryId <span style="font-weight: bold; font-style: italic;">&lt;-</span> runDB <span style="font-weight: bold; font-style: italic;">$</span> insert <span style="font-weight: bold; font-style: italic;">$</span> entry {entryAuthor <span style="font-weight: bold; font-style: italic;">=</span> userId}
-      redirect <span style="font-weight: bold; font-style: italic;">$</span> <span style="font-weight: bold; text-decoration: underline;">EntryR</span> entryId
-    <span style="font-weight: bold;">_</span> <span style="font-weight: bold; font-style: italic;">-&gt;</span> defaultLayout <span style="font-weight: bold; font-style: italic;">$</span>(widgetFile <span style="font-style: italic;">"entry-new"</span>)
+<span style="color: #268bd2;">postEntryNewR</span> <span style="color: #268bd2;">::</span> <span style="color: #b58900;">Handler</span> <span style="color: #b58900;">Html</span>
+<span style="color: #268bd2;">postEntryNewR</span> <span style="color: #268bd2;">=</span> <span style="color: #859900; font-weight: bold;">do</span>
+  ((res, widget), enctype) <span style="color: #268bd2;">&lt;-</span> runFormPost entryForm
+  (userId, user) <span style="color: #268bd2;">&lt;-</span> requireAuthPair
+  <span style="color: #859900; font-weight: bold;">case</span> res <span style="color: #859900; font-weight: bold;">of</span>
+    <span style="color: #b58900;">FormSuccess</span> entry <span style="color: #268bd2;">-&gt;</span> <span style="color: #859900; font-weight: bold;">do</span>
+      entryId <span style="color: #268bd2;">&lt;-</span> runDB <span style="color: #268bd2;">$</span> insert <span style="color: #268bd2;">$</span> entry {entryAuthor <span style="color: #268bd2;">=</span> userId}
+      redirect <span style="color: #268bd2;">$</span> <span style="color: #b58900;">EntryR</span> entryId
+    <span style="color: #859900; font-weight: bold;">_</span> <span style="color: #268bd2;">-&gt;</span> defaultLayout <span style="color: #268bd2;">$</span>(widgetFile <span style="color: #2aa198;">"entry-new"</span>)
 </pre>
 </div>
 </section>
@@ -263,10 +263,10 @@ entry-new.hamlet
 </p>
 <div class="org-src-container">
 
-<pre  class="src src-haskell"><span style="font-weight: bold; font-style: italic;">&lt;</span>form <span style="font-weight: bold; font-style: italic;">#</span>new<span style="font-weight: bold; font-style: italic;">-</span>entry<span style="font-weight: bold; font-style: italic;">-</span>form <span style="font-weight: bold; font-style: italic;">.</span>form<span style="font-weight: bold; font-style: italic;">-</span>control method<span style="font-weight: bold; font-style: italic;">=</span>post
-      action<span style="font-weight: bold; font-style: italic;">=@</span>{<span style="font-weight: bold; text-decoration: underline;">EntryNewR</span>} enctype<span style="font-weight: bold; font-style: italic;">=#</span>{enctype}<span style="font-weight: bold; font-style: italic;">&gt;</span>
-  <span style="font-weight: bold; font-style: italic;">^</span>{widget}
-  <span style="font-weight: bold; font-style: italic;">&lt;</span>button <span style="font-weight: bold; font-style: italic;">.</span>btn<span style="font-weight: bold; font-style: italic;">.</span>btn<span style="font-weight: bold; font-style: italic;">-</span><span style="font-weight: bold;">default</span><span style="font-weight: bold; font-style: italic;">&gt;</span><span style="font-weight: bold; text-decoration: underline;">Submit</span><span style="font-weight: bold; font-style: italic;">!</span>
+<pre  class="src src-haskell"><span style="color: #268bd2;">&lt;</span>form <span style="color: #268bd2;">#</span>new<span style="color: #268bd2;">-</span>entry<span style="color: #268bd2;">-</span>form <span style="color: #268bd2;">.</span>form<span style="color: #268bd2;">-</span>control method<span style="color: #268bd2;">=</span>post
+      action<span style="color: #268bd2;">=@</span>{<span style="color: #b58900;">EntryNewR</span>} enctype<span style="color: #268bd2;">=#</span>{enctype}<span style="color: #268bd2;">&gt;</span>
+  <span style="color: #268bd2;">^</span>{widget}
+  <span style="color: #268bd2;">&lt;</span>button <span style="color: #268bd2;">.</span>btn<span style="color: #268bd2;">.</span>btn<span style="color: #268bd2;">-</span><span style="color: #859900; font-weight: bold;">default</span><span style="color: #268bd2;">&gt;</span><span style="color: #b58900;">Submit</span><span style="color: #268bd2;">!</span>
 </pre>
 </div>
 </section>
@@ -290,23 +290,23 @@ Reusable combinations of:
 <h3 id="org4cae79e">Haskell</h3>
 <div class="org-src-container">
 
-<pre  class="src src-haskell"><span style="font-weight: bold;">addToLibrary</span> <span style="font-weight: bold; font-style: italic;">::</span> <span style="font-weight: bold; text-decoration: underline;">UserId</span> <span style="font-weight: bold; font-style: italic;">-&gt;</span> <span style="font-weight: bold; text-decoration: underline;">RefId</span> <span style="font-weight: bold; font-style: italic;">-&gt;</span> <span style="font-weight: bold; text-decoration: underline;">Widget</span>
-<span style="font-weight: bold;">addToLibrary</span> uid refId <span style="font-weight: bold; font-style: italic;">=</span> <span style="font-weight: bold;">do</span>
-  libFormId <span style="font-weight: bold; font-style: italic;">&lt;-</span> newIdent
-  mlib <span style="font-weight: bold; font-style: italic;">&lt;-</span> handlerToWidget <span style="font-weight: bold; font-style: italic;">$</span> runDB <span style="font-weight: bold; font-style: italic;">$</span> getBy <span style="font-weight: bold; font-style: italic;">$</span> <span style="font-weight: bold; text-decoration: underline;">UniqEntry</span> uid refId
-  <span style="font-weight: bold;">let</span> (icon, txt) <span style="font-weight: bold; font-style: italic;">=</span> <span style="font-weight: bold;">case</span> mlib <span style="font-weight: bold;">of</span>
-        <span style="font-weight: bold; text-decoration: underline;">Nothing</span> <span style="font-weight: bold; font-style: italic;">-&gt;</span> (<span style="font-style: italic;">"oi-plus"</span>, <span style="font-style: italic;">"Add to your library"</span>) <span style="font-weight: bold; font-style: italic;">::</span> (<span style="font-weight: bold; text-decoration: underline;">Text</span>, <span style="font-weight: bold; text-decoration: underline;">Text</span>)
-        <span style="font-weight: bold; text-decoration: underline;">Just</span> <span style="font-weight: bold;">_</span> <span style="font-weight: bold; font-style: italic;">-&gt;</span> (<span style="font-style: italic;">"oi-check"</span>, <span style="font-style: italic;">"In your library"</span>) <span style="font-weight: bold; font-style: italic;">::</span> (<span style="font-weight: bold; text-decoration: underline;">Text</span>, <span style="font-weight: bold; text-decoration: underline;">Text</span>)
-  toWidget [julius<span style="font-style: italic;">|</span>
-<span style="font-style: italic;">&lt;JS from next slide&gt;</span>
-<span style="font-style: italic;">|</span>]
+<pre  class="src src-haskell"><span style="color: #268bd2;">addToLibrary</span> <span style="color: #268bd2;">::</span> <span style="color: #b58900;">UserId</span> <span style="color: #268bd2;">-&gt;</span> <span style="color: #b58900;">RefId</span> <span style="color: #268bd2;">-&gt;</span> <span style="color: #b58900;">Widget</span>
+<span style="color: #268bd2;">addToLibrary</span> uid refId <span style="color: #268bd2;">=</span> <span style="color: #859900; font-weight: bold;">do</span>
+  libFormId <span style="color: #268bd2;">&lt;-</span> newIdent
+  mlib <span style="color: #268bd2;">&lt;-</span> handlerToWidget <span style="color: #268bd2;">$</span> runDB <span style="color: #268bd2;">$</span> getBy <span style="color: #268bd2;">$</span> <span style="color: #b58900;">UniqEntry</span> uid refId
+  <span style="color: #859900; font-weight: bold;">let</span> (icon, txt) <span style="color: #268bd2;">=</span> <span style="color: #859900; font-weight: bold;">case</span> mlib <span style="color: #859900; font-weight: bold;">of</span>
+        <span style="color: #b58900;">Nothing</span> <span style="color: #268bd2;">-&gt;</span> (<span style="color: #2aa198;">"oi-plus"</span>, <span style="color: #2aa198;">"Add to your library"</span>) <span style="color: #268bd2;">::</span> (<span style="color: #b58900;">Text</span>, <span style="color: #b58900;">Text</span>)
+        <span style="color: #b58900;">Just</span> <span style="color: #859900; font-weight: bold;">_</span> <span style="color: #268bd2;">-&gt;</span> (<span style="color: #2aa198;">"oi-check"</span>, <span style="color: #2aa198;">"In your library"</span>) <span style="color: #268bd2;">::</span> (<span style="color: #b58900;">Text</span>, <span style="color: #b58900;">Text</span>)
+  toWidget [julius<span style="color: #2aa198;">|</span>
+<span style="color: #2aa198;">&lt;JS from next slide&gt;</span>
+<span style="color: #2aa198;">|</span>]
   toWidget [whamlet|
-<span style="color: #000000; background-color: #ffffff;">&lt;</span><span style="font-weight: bold;">form</span><span style="color: #000000; background-color: #ffffff;"> </span><span style="font-weight: bold; font-style: italic;">.form-horizontal</span><span style="color: #000000; background-color: #ffffff;"> #</span><span style="font-weight: bold;">#{libFormId}</span><span style="color: #000000; background-color: #ffffff;">&gt;</span>
-<span style="color: #000000; background-color: #ffffff;">  &lt;</span><span style="font-weight: bold;">button</span><span style="color: #000000; background-color: #ffffff;"> </span><span style="font-weight: bold; font-style: italic;">.card-text.btn.btn-success.clickable.align-middle</span><span style="color: #000000; background-color: #ffffff;"> </span><span style="font-weight: bold; font-style: italic;">type</span><span style="color: #000000; background-color: #ffffff;">=</span><span style="font-style: italic;">submit&gt;</span>
-<span style="color: #000000; background-color: #ffffff;">    &lt;</span><span style="font-weight: bold;">i</span><span style="color: #000000; background-color: #ffffff;"> </span><span style="font-weight: bold; font-style: italic;">.oi.</span><span style="font-weight: bold;">#{icon}</span><span style="color: #000000; background-color: #ffffff;">.align-middle </span><span style="font-weight: bold; font-style: italic;">aria-hidden</span><span style="color: #000000; background-color: #ffffff;">=</span><span style="font-style: italic;">"true"</span><span style="color: #000000; background-color: #ffffff;">&gt;</span>
-<span style="color: #000000; background-color: #ffffff;">    &lt;</span><span style="font-weight: bold;">span</span><span style="color: #000000; background-color: #ffffff;"> </span><span style="font-weight: bold; font-style: italic;">.align-middle</span><span style="color: #000000; background-color: #ffffff;">&gt;</span>
-<span style="color: #000000; background-color: #ffffff;">      </span><span style="font-weight: bold;">#{txt}</span>
-<span style="color: #000000; background-color: #ffffff;">|</span>]
+<span style="color: #657b83; background-color: #fdf6e3;">&lt;</span><span style="color: #268bd2;">form</span><span style="color: #657b83; background-color: #fdf6e3;"> </span><span style="color: #268bd2;">.form-horizontal</span><span style="color: #657b83; background-color: #fdf6e3;"> #</span><span style="color: #268bd2;">#{libFormId}</span><span style="color: #657b83; background-color: #fdf6e3;">&gt;</span>
+<span style="color: #657b83; background-color: #fdf6e3;">  &lt;</span><span style="color: #268bd2;">button</span><span style="color: #657b83; background-color: #fdf6e3;"> </span><span style="color: #268bd2;">.card-text.btn.btn-success.clickable.align-middle</span><span style="color: #657b83; background-color: #fdf6e3;"> </span><span style="color: #268bd2;">type</span><span style="color: #657b83; background-color: #fdf6e3;">=</span><span style="color: #2aa198;">submit&gt;</span>
+<span style="color: #657b83; background-color: #fdf6e3;">    &lt;</span><span style="color: #268bd2;">i</span><span style="color: #657b83; background-color: #fdf6e3;"> </span><span style="color: #268bd2;">.oi.</span><span style="color: #268bd2;">#{icon}</span><span style="color: #657b83; background-color: #fdf6e3;">.align-middle </span><span style="color: #268bd2;">aria-hidden</span><span style="color: #657b83; background-color: #fdf6e3;">=</span><span style="color: #2aa198;">"true"</span><span style="color: #657b83; background-color: #fdf6e3;">&gt;</span>
+<span style="color: #657b83; background-color: #fdf6e3;">    &lt;</span><span style="color: #268bd2;">span</span><span style="color: #657b83; background-color: #fdf6e3;"> </span><span style="color: #268bd2;">.align-middle</span><span style="color: #657b83; background-color: #fdf6e3;">&gt;</span>
+<span style="color: #657b83; background-color: #fdf6e3;">      </span><span style="color: #268bd2;">#{txt}</span>
+<span style="color: #657b83; background-color: #fdf6e3;">|</span>]
 </pre>
 </div>
 </section>
@@ -314,20 +314,20 @@ Reusable combinations of:
 <h3 id="org34c887d">Type safe JS (kinda)</h3>
 <div class="org-src-container">
 
-<pre  class="src src-javascript">$(<span style="font-style: italic;">"##{rawJS libFormId}"</span>).submit(<span style="font-weight: bold;">function</span>(<span style="font-weight: bold; font-style: italic;">event</span>){
+<pre  class="src src-javascript">$(<span style="color: #2aa198;">"##{rawJS libFormId}"</span>).submit(<span style="color: #859900; font-weight: bold;">function</span>(<span style="color: #268bd2;">event</span>){
   event.preventDefault();
   $.ajax({
-    url: <span style="font-style: italic;">'@{LibraryR}'</span>,
-    type: <span style="font-style: italic;">'POST'</span>,
-    contentType: <span style="font-style: italic;">"application/json"</span>,
+    url: <span style="color: #2aa198;">'@{LibraryR}'</span>,
+    type: <span style="color: #2aa198;">'POST'</span>,
+    contentType: <span style="color: #2aa198;">"application/json"</span>,
     data: JSON.stringify({refId: #{toJSON $ fromSqlKey refId}}),
-    <span style="font-weight: bold;">success</span>: <span style="font-weight: bold;">function</span> (<span style="font-weight: bold; font-style: italic;">data</span>) {
-      $(<span style="font-style: italic;">"##{rawJS libFormId} &gt; button &gt; i"</span>).removeClass(<span style="font-style: italic;">"oi-plus"</span>);
-      $(<span style="font-style: italic;">"##{rawJS libFormId} &gt; button &gt; i"</span>).addClass(<span style="font-style: italic;">"oi-check"</span>);
-      $(<span style="font-style: italic;">"##{rawJS libFormId} &gt; button &gt; span"</span>).text(<span style="font-style: italic;">"In your library"</span>);
+    <span style="color: #268bd2;">success</span>: <span style="color: #859900; font-weight: bold;">function</span> (<span style="color: #268bd2;">data</span>) {
+      $(<span style="color: #2aa198;">"##{rawJS libFormId} &gt; button &gt; i"</span>).removeClass(<span style="color: #2aa198;">"oi-plus"</span>);
+      $(<span style="color: #2aa198;">"##{rawJS libFormId} &gt; button &gt; i"</span>).addClass(<span style="color: #2aa198;">"oi-check"</span>);
+      $(<span style="color: #2aa198;">"##{rawJS libFormId} &gt; button &gt; span"</span>).text(<span style="color: #2aa198;">"In your library"</span>);
     },
-    <span style="font-weight: bold;">error</span>: <span style="font-weight: bold;">function</span> (<span style="font-weight: bold; font-style: italic;">data</span>) {
-      console.warn(<span style="font-style: italic;">"Error: "</span> + data);
+    <span style="color: #268bd2;">error</span>: <span style="color: #859900; font-weight: bold;">function</span> (<span style="color: #268bd2;">data</span>) {
+      console.warn(<span style="color: #2aa198;">"Error: "</span> + data);
     },
   });
 });
@@ -340,13 +340,13 @@ Reusable combinations of:
 <h2 id="org85cd822">Content Negotiation - TypedContent</h2>
 <div class="org-src-container">
 
-<pre  class="src src-haskell"><span style="font-weight: bold;">getEntryR</span> <span style="font-weight: bold; font-style: italic;">::</span> <span style="font-weight: bold; text-decoration: underline;">EntryId</span> <span style="font-weight: bold; font-style: italic;">-&gt;</span> <span style="font-weight: bold; text-decoration: underline;">Handler</span> <span style="font-weight: bold; text-decoration: underline;">TypedContent</span>
-<span style="font-weight: bold;">getEntryR</span> entryId <span style="font-weight: bold; font-style: italic;">=</span> <span style="font-weight: bold;">do</span>
-  entry <span style="font-weight: bold; font-style: italic;">&lt;-</span> runDB <span style="font-weight: bold; font-style: italic;">$</span> get404 entryId
-  selectRep <span style="font-weight: bold; font-style: italic;">$</span> <span style="font-weight: bold;">do</span>
-    provideRep <span style="font-weight: bold; font-style: italic;">$</span> defaultLayout <span style="font-weight: bold; font-style: italic;">$</span> [whamlet|<span style="font-weight: bold;">#{entry}</span><span style="color: #000000; background-color: #ffffff;">|</span>]
+<pre  class="src src-haskell"><span style="color: #268bd2;">getEntryR</span> <span style="color: #268bd2;">::</span> <span style="color: #b58900;">EntryId</span> <span style="color: #268bd2;">-&gt;</span> <span style="color: #b58900;">Handler</span> <span style="color: #b58900;">TypedContent</span>
+<span style="color: #268bd2;">getEntryR</span> entryId <span style="color: #268bd2;">=</span> <span style="color: #859900; font-weight: bold;">do</span>
+  entry <span style="color: #268bd2;">&lt;-</span> runDB <span style="color: #268bd2;">$</span> get404 entryId
+  selectRep <span style="color: #268bd2;">$</span> <span style="color: #859900; font-weight: bold;">do</span>
+    provideRep <span style="color: #268bd2;">$</span> defaultLayout <span style="color: #268bd2;">$</span> [whamlet|<span style="color: #268bd2;">#{entry}</span><span style="color: #657b83; background-color: #fdf6e3;">|</span>]
     provideJson entry
-    provideRepType <span style="font-style: italic;">"text/csv"</span> <span style="font-weight: bold; font-style: italic;">$</span> Csv.encode entry
+    provideRepType <span style="color: #2aa198;">"text/csv"</span> <span style="color: #268bd2;">$</span> Csv.encode entry
 </pre>
 </div>
 </section>

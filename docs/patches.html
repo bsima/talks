@@ -27,32 +27,387 @@
 <body>
 <div class="reveal">
 <div class="slides">
-<section id="sec-title-slide"><h1 class="title">A Categorical Theory of Patches</h1><h2 class="author">Ben Sima</h2><h2 class="email"><a href="mailto:ben@bsima.me">ben@bsima.me</a></h2><p class="date">Created: 2018-04-12 Thu 22:27</p>
+<section id="sec-title-slide"><h1 class="title">A Categorical Theory of Patches</h1><h2 class="author">Ben Sima</h2><h2 class="email"><a href="mailto:ben@bsima.me">ben@bsima.me</a></h2><p class="date">Created: 2018-05-03 Thu 18:27</p>
 </section>
 
 <section>
-<section id="slide-orgf693c49">
-<h2 id="orgf693c49">A headline</h2>
+<section id="slide-org9d17699">
+<h2 id="org9d17699">Categorical Theory of Patches</h2>
+<p>
+Source: <a href="https://github.com/bsima/talks">https://github.com/bsima/talks</a>
+</p>
+
+<p>
+Slides: <a href="https://bsima.github.io/talks/patches.html">https://bsima.github.io/talks/patches.html</a>
+</p>
 </section>
 </section>
 <section>
-<section id="slide-org54f5708">
-<h2 id="org54f5708">Second headline</h2>
-<div class="outline-text-2" id="text-org54f5708">
+<section id="slide-org8350466">
+<h2 id="org8350466">Life of a patch</h2>
+<div class="outline-text-2" id="text-org8350466">
 </div>
 </section>
-<section id="slide-orgc7f07ba">
-<h3 id="orgc7f07ba">Sub headline</h3>
-<div class="outline-text-3" id="text-orgc7f07ba">
+<section id="slide-org5afe10d">
+<h3 id="org5afe10d">Create a file</h3>
+<p>
+Cavs are putting together their starting lineup
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-diff"><span style="color: #333333;">PG George Hill</span>
+<span style="color: #333333;">SG Kyle Korver</span>
+PF JR Smith
+</pre>
 </div>
 </section>
-<section id="slide-orgf26c57e">
-<h4 id="orgf26c57e">Sub-sub headline</h4>
+<section id="slide-org43a5382">
+<h3 id="org43a5382">Edit the file (patch 1)</h3>
+<div class="org-src-container">
+
+<pre  class="src src-diff"><span style="color: #333333;"> PG George Hill</span>
+<span style="color: #333333;"> SG Kyle Korver</span>
+<span style="color: #859900;">+</span><span style="color: #859900;">SF LeBron James</span>
+ PF JR Smith
+</pre>
+</div>
+</section>
+<section id="slide-org6018c6d">
+<h3 id="org6018c6d">Edit the files again (patch 2)</h3>
+<div class="org-src-container">
+
+<pre  class="src src-diff"><span style="color: #333333;"> PG George Hill</span>
+<span style="color: #333333;"> SG Kyle Korver</span>
+<span style="color: #859900;">+</span><span style="color: #859900;">C  Kevin Love</span>
+ PF JR Smith
+</pre>
+</div>
+</section>
+<section id="slide-org86dab48">
+<h3 id="org86dab48">Merge conflict!</h3>
+<div class="org-src-container">
+
+<pre  class="src src-diff"><span style="color: #333333;"> PG George Hill</span>
+<span style="color: #333333;"> SG Kyle Korver</span>
+<span style="color: #dc322f;">&lt;</span><span style="color: #dc322f;">&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span>
+<span style="color: #859900;">+</span><span style="color: #859900;">SF LeBron James</span>
+=======
+<span style="color: #859900;">+</span><span style="color: #859900;">C  Kevin Love</span>
+<span style="color: #859900;">&gt;</span><span style="color: #859900;">&gt;&gt;&gt;&gt;&gt;&gt; 7ccac4</span>
+ PF JR Smith
+</pre>
+</div>
+</section>
+<section id="slide-org1784778">
+<h3 id="org1784778">Visualizing the merge</h3>
+<div class="org-src-container">
+
+<pre  class="src src-txt">PG George Hill
+    |
+SG Kyle Korver ----,
+    |               \
+SF Lebron James      C  Kevin Love
+    |               /
+PF JR Smith -------'
+</pre>
+</div>
+
+<p>
+"object in the free finite cocompletion of the category of files and patches"
+a.k.a. "directed graph file" a.k.a. digle
+</p>
+</section>
+<section id="slide-orgba7ca3e">
+<h3 id="orgba7ca3e">Final object after pushout</h3>
+<div class="org-src-container">
+
+<pre  class="src src-txt">PG George Hill
+SG Kyle Korver
+SF Lebron James
+C  Kevin Love
+PF JR Smith
+</pre>
+</div>
 </section>
 </section>
 <section>
-<section id="slide-orgd3a48dd">
-<h2 id="orgd3a48dd">Third headline</h2>
+<section id="slide-org1c40f10">
+<h2 id="org1c40f10">Diagramming a 3-way merge</h2>
+<p>
+with the help of Joe Neeman
+</p>
+</section>
+<section id="slide-orgdd6246c">
+<h3 id="orgdd6246c">The three patches</h3>
+
+<div class="figure">
+<p><object type="image/svg+xml" data="https://jneem.github.io/images/pijul_tikz_block_8.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+
+<p>
+With three ways to merge them&#x2026;
+</p>
+</section>
+<section id="slide-org7622804">
+<h3 id="org7622804">A) First merge p and q</h3>
+
+<div class="figure">
+<p><object type="image/svg+xml" data="https://jneem.github.io/images/pijul_tikz_block_9.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+</section>
+<section id="slide-org0e58f21">
+<h3 id="org0e58f21">A) Second merge pm with r</h3>
+<p>
+pm is the resulting patch after applying p and then m, same as qn
+</p>
+
+
+<div class="figure">
+<p><object type="image/svg+xml" data="https://jneem.github.io/images/pijul_tikz_block_10.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+</section>
+<section id="slide-org56e0dec">
+<h3 id="org56e0dec">B) Merge q and r, then merge p</h3>
+
+<div class="figure">
+<p><object type="image/svg+xml" data="https://jneem.github.io/images/pijul_tikz_block_11.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+</section>
+<section id="slide-org9ea1330">
+<h3 id="org9ea1330">C) Merge p and q, then q and r, then merge pq and qr</h3>
+
+<div class="figure">
+<p><object type="image/svg+xml" data="https://jneem.github.io/images/pijul_tikz_block_12.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org1bfdf96">
+<h2 id="org1bfdf96">Categories of files and patches</h2>
+<p>
+(plus some basic category theory)
+</p>
+</section>
+<section id="slide-org53d38da">
+<h3 id="org53d38da">Morphisms (arrows)</h3>
+<ul>
+<li><p>
+Morphisms are (structure-preserving) functions
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-haskell"><span style="color: #93a1a1;">-- </span><span style="color: #93a1a1;">Haskell</span>
+<span style="color: #268bd2;">f</span> <span style="color: #268bd2;">::</span> [<span style="color: #b58900;">Int</span>] <span style="color: #268bd2;">-&gt;</span> [<span style="color: #b58900;">String</span>]
+
+<span style="color: #93a1a1;">-- </span><span style="color: #93a1a1;">Math</span>
+f <span style="color: #268bd2;">:</span> <span style="color: #b58900;">Z</span> <span style="color: #268bd2;">&#8594;</span> <span style="color: #b58900;">X</span>
+</pre>
+</div></li>
+<li>lowercase letters</li>
+
+</ul>
+</section>
+<section id="slide-org66b9b80">
+<h3 id="org66b9b80">Objects</h3>
+<ul>
+<li>uppercase letters</li>
+<li>sets with more structure</li>
+<li>non-arbitrary groupings</li>
+
+</ul>
+</section>
+<section id="slide-org62392b2">
+<h3 id="org62392b2">File objects</h3>
+<dl>
+<dt>line</dt><dd>L = {a, b, &#x2026;}
+<ul>
+<li>A set of words (a, b, &#x2026; are stand-ins for any characters)</li>
+
+</ul></dd>
+<dt>file</dt><dd>A : [n] → L, where n ∈ Nats and [n] = {0,1,&#x2026;,n-1}
+<ul>
+<li>An indexed list of lines</li>
+
+</ul></dd>
+
+</dl>
+</section>
+<section id="slide-org5e5347f">
+<h3 id="org5e5347f">File morphisms</h3>
+<dl>
+<dt>insertion</dt><dd>η(a) : I -&gt; a</dd>
+<dt>deletion</dt><dd>ε(a) : a -&gt; I</dd>
+
+</dl>
+<p>
+Together they make <b>patches</b>
+</p>
+</section>
+<section id="slide-org6d7c7d3">
+<h3 id="org6d7c7d3">Category</h3>
+<p>
+Collection of objects and their arrows
+</p>
+
+
+<div class="figure">
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Category_SVG.svg/330px-Category_SVG.svg.png" alt="330px-Category_SVG.svg.png" />
+</p>
+</div>
+
+<div class="org-src-container">
+
+<pre  class="src src-haskell"><span style="color: #268bd2;">f</span> <span style="color: #268bd2;">::</span> <span style="color: #b58900;">A</span> <span style="color: #268bd2;">-&gt;</span> <span style="color: #b58900;">B</span>
+
+<span style="color: #268bd2;">g</span> <span style="color: #268bd2;">::</span> <span style="color: #b58900;">B</span> <span style="color: #268bd2;">-&gt;</span> <span style="color: #b58900;">C</span>
+
+(g <span style="color: #268bd2;">.</span> f) <span style="color: #268bd2;">::</span> <span style="color: #b58900;">A</span> <span style="color: #268bd2;">-&gt;</span> <span style="color: #b58900;">C</span>
+</pre>
+</div>
+</section>
+<section id="slide-org7754945">
+<h3 id="org7754945">The "fancy-L" category</h3>
+<ul>
+<li>files = objects</li>
+<li>patches = morphisms</li>
+
+</ul>
+</section>
+<section id="slide-org4447b44">
+<h3 id="org4447b44">Monoidal</h3>
+<p>
+To be monoidal, a category must:
+</p>
+<ul>
+<li>have a bifunctor ⊗ : C * C → C
+<ul>
+<li>if you put together two kinds of things, you get the same kind of thing back</li>
+<li>a.k.a. tensor product</li>
+
+</ul></li>
+<li>have a "unit" or "identity" object</li>
+<li>be associative, (A * B) * C = A * (B * C)</li>
+<li>left and right identities (strict monoidal = these are the same)</li>
+
+</ul>
+</section>
+<section id="slide-org61ad466">
+<h3 id="org61ad466">fancy-L is strinctly monoidal</h3>
+<ul>
+<li>[m]⊗[n] = [m+n]</li>
+<li>A : [m] → L and B : [n] → L
+<ul>
+<li>(A⊗B)(i) = A(i) if i &lt; m</li>
+<li>(A⊗B)(i) = B(i) if i &gt; m</li>
+
+</ul></li>
+<li>unit is empty file I : [0] → L</li>
+
+</ul>
+</section>
+<section id="slide-org9bef43f">
+<h3 id="org9bef43f">fancy-L is free monoidal (prop 2)</h3>
+<p>
+'a' is some line in the file. Recall:
+</p>
+<dl>
+<dt>insertion</dt><dd>η(a) : I -&gt; a</dd>
+<dt>deletion</dt><dd>ε(a) : a -&gt; I</dd>
+<dt>ε(a)◦η(a) = id(I)</dt><dd>deleting and inserting a line amounts to nothing</dd>
+
+</dl>
+</section>
+<section id="slide-org7286f0a">
+<h3 id="org7286f0a">Diagram (a functor)</h3>
+<ul>
+<li><p>
+an indexing applied to a category's objects and morphisms
+</p>
+<blockquote nil>
+<p>
+Formally, a diagram of type J in a category C is a (covariant) functor D : J →
+C.
+</p>
+</blockquote></li>
+<li>Cone = all the morphisms on a category's objects that commute</li>
+<li>Limit = unique morphism in the cone
+<ul>
+<li>if J is the discrete category with two objects, the limit is just the binary
+product</li>
+
+</ul></li>
+
+</ul>
+</section>
+<section id="slide-org9377681">
+<h3 id="org9377681">Limit / colimit</h3>
+<p>
+Limit:
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Functor_cone_(extended).svg/294px-Functor_cone_(extended).svg.png" alt="294px-Functor_cone_(extended).svg.png" />
+</p>
+
+<p>
+Colimit:
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Functor_co-cone_(extended).svg/294px-Functor_co-cone_(extended).svg.png" alt="294px-Functor_co-cone_(extended).svg.png" />
+</p>
+</section>
+<section id="slide-orgba37afd">
+<h3 id="orgba37afd">Pushout</h3>
+<ul>
+<li>some object P</li>
+<li>two morphisms X → P and Y → P</li>
+<li>when applied to the below diagram, makes f and g commute</li>
+
+</ul>
+
+<div class="figure">
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Categorical_pushout_(expanded).svg/338px-Categorical_pushout_(expanded).svg.png" alt="338px-Categorical_pushout_(expanded).svg.png" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org1890e17">
+<h2 id="org1890e17">Category of conflicting files</h2>
+<p>
+Leving this as an exercise to the reader&#x2026;
+</p>
+</section>
+<section id="slide-org157591a">
+<h3 id="org157591a">proposition 4?</h3>
+<p>
+Defines idempotency relations between insertion and deletion
+</p>
+</section>
+<section id="slide-org0b75642">
+<h3 id="org0b75642">fancy-P is the <i>free finite conservative cocompletion</i> of fancy-L</h3>
+<dl>
+<dt>conservative</dt><dd>we preserve colimits already in fancy-L</dd>
+<dt>cocompletion</dt><dd>adjoining the colimits of the morphisms</dd>
+
+</dl>
+</section>
+</section>
+<section>
+<section id="slide-org1740239">
+<h2 id="org1740239">Further reading</h2>
+<ul>
+<li><a href="https://jneem.github.io/">https://jneem.github.io/</a></li>
+<li><a href="https://pijul.com/">https://pijul.com/</a></li>
+<li><a href="https://bartoszmilewski.com/2014/10/28/category-theory-for-programmers-the-preface/">https://bartoszmilewski.com/2014/10/28/category-theory-for-programmers-the-preface/</a></li>
+<li>Slides: <a href="https://github.com/bsima/talks">https://github.com/bsima/talks</a></li>
+
+</ul>
 </section>
 </section>
 </div>
