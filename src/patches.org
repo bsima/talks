@@ -18,8 +18,169 @@
 #+REVEAL_PLUGINS: (notes)
 #+REVEAL_ROOT: https://bsima.github.io/talks/revealjs
 
-* A headline
-* Second headline
-** Sub headline
-*** Sub-sub headline
-* Third headline
+* Categorical Theory of Patches
+Source: https://github.com/bsima/talks
+
+Slides: https://bsima.github.io/talks/patches.html
+* Life of a patch
+** Create a file
+Cavs are putting together their starting lineup
+#+BEGIN_SRC diff
+ PG George Hill
+ SG Kyle Korver
+ PF JR Smith
+#+END_SRC
+** Edit the file (patch 1)
+#+BEGIN_SRC diff
+ PG George Hill
+ SG Kyle Korver
++SF LeBron James
+ PF JR Smith
+#+END_SRC
+** Edit the files again (patch 2)
+#+BEGIN_SRC diff
+ PG George Hill
+ SG Kyle Korver
++C  Kevin Love
+ PF JR Smith
+#+END_SRC
+** Merge conflict!
+#+BEGIN_SRC diff
+ PG George Hill
+ SG Kyle Korver
+<<<<<<< HEAD
++SF LeBron James
+=======
++C  Kevin Love
+>>>>>>> 7ccac4
+ PF JR Smith
+#+END_SRC
+** Visualizing the merge
+#+BEGIN_SRC txt
+ PG George Hill
+     |
+ SG Kyle Korver ----,
+     |               \
+ SF Lebron James      C  Kevin Love
+     |               /
+ PF JR Smith -------'
+#+END_SRC
+
+"object in the free finite cocompletion of the category of files and patches"
+a.k.a. "directed graph file" a.k.a. digle
+** Final object after pushout
+#+BEGIN_SRC txt
+ PG George Hill
+ SG Kyle Korver
+ SF Lebron James
+ C  Kevin Love
+ PF JR Smith
+#+END_SRC
+* Diagramming a 3-way merge
+with the help of Joe Neeman
+** The three patches
+[[https://jneem.github.io/images/pijul_tikz_block_8.svg]]
+
+With three ways to merge them...
+** A) First merge p and q
+[[https://jneem.github.io/images/pijul_tikz_block_9.svg]]
+** A) Second merge pm with r
+pm is the resulting patch after applying p and then m, same as qn
+
+[[https://jneem.github.io/images/pijul_tikz_block_10.svg]]
+** B) Merge q and r, then merge p
+[[https://jneem.github.io/images/pijul_tikz_block_11.svg]]
+** C) Merge p and q, then q and r, then merge pq and qr
+[[https://jneem.github.io/images/pijul_tikz_block_12.svg]]
+* Categories of files and patches
+(plus some basic category theory)
+** Morphisms (arrows)
+- Morphisms are (structure-preserving) functions
+  #+BEGIN_SRC haskell
+  -- Haskell
+  f :: [Int] -> [String]
+
+  -- Math
+  f : Z → X
+  #+END_SRC
+- lowercase letters
+** Objects
+- uppercase letters
+- sets with more structure
+- non-arbitrary groupings
+** File objects
+- line :: L = {a, b, ...}
+  - A set of words (a, b, ... are stand-ins for any characters)
+- file :: A : [n] → L, where n ∈ Nats and [n] = {0,1,...,n-1}
+  - An indexed list of lines
+** File morphisms
+- insertion :: η(a) : I -> a
+- deletion :: ε(a) : a -> I
+Together they make *patches*
+** Category
+Collection of objects and their arrows
+
+[[https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Category_SVG.svg/330px-Category_SVG.svg.png]]
+
+#+BEGIN_SRC haskell
+f :: A -> B
+
+g :: B -> C
+
+(g . f) :: A -> C
+#+END_SRC
+** The "fancy-L" category
+- files = objects
+- patches = morphisms
+** Monoidal
+To be monoidal, a category must:
+- have a bifunctor ⊗ : C * C → C
+  - if you put together two kinds of things, you get the same kind of thing back
+  - a.k.a. tensor product
+- have a "unit" or "identity" object
+- be associative, (A * B) * C = A * (B * C)
+- left and right identities (strict monoidal = these are the same)
+** fancy-L is strinctly monoidal
+- [m]⊗[n] = [m+n]
+- A : [m] → L and B : [n] → L
+  - (A⊗B)(i) = A(i) if i < m
+  - (A⊗B)(i) = B(i) if i > m
+- unit is empty file I : [0] → L
+** fancy-L is free monoidal (prop 2)
+'a' is some line in the file. Recall:
+- insertion :: η(a) : I -> a
+- deletion :: ε(a) : a -> I
+- ε(a)◦η(a) = id(I) :: deleting and inserting a line amounts to nothing
+** Diagram (a functor)
+- an indexing applied to a category's objects and morphisms
+  #+BEGIN_QUOTE
+  Formally, a diagram of type J in a category C is a (covariant) functor D : J →
+  C.
+  #+END_QUOTE
+- Cone = all the morphisms on a category's objects that commute
+- Limit = unique morphism in the cone
+  - if J is the discrete category with two objects, the limit is just the binary
+    product
+** Limit / colimit
+Limit:
+[[https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Functor_cone_%28extended%29.svg/294px-Functor_cone_%28extended%29.svg.png]]
+
+Colimit:
+[[https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Functor_co-cone_%28extended%29.svg/294px-Functor_co-cone_%28extended%29.svg.png]]
+** Pushout
+- some object P
+- two morphisms X → P and Y → P
+- when applied to the below diagram, makes f and g commute
+[[https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Categorical_pushout_%28expanded%29.svg/338px-Categorical_pushout_%28expanded%29.svg.png]]
+* Category of conflicting files
+Leving this as an exercise to the reader...
+** proposition 4?
+Defines idempotency relations between insertion and deletion
+** fancy-P is the /free finite conservative cocompletion/ of fancy-L
+- conservative :: we preserve colimits already in fancy-L
+- cocompletion :: adjoining the colimits of the morphisms
+* Further reading
+- https://jneem.github.io/
+- https://pijul.com/
+- https://bartoszmilewski.com/2014/10/28/category-theory-for-programmers-the-preface/
+- Slides: https://github.com/bsima/talks
